@@ -103,7 +103,7 @@ def _mergejs(in_files, out_file, temp_file='.temp'):
 
     temp.close()
 
-    os.system('uglifyjs %s -o %s' % (temp_file, out_file))
+    os.system('uglifyjs %s -m -o %s' % (temp_file, out_file))
 
     org_size = os.path.getsize(temp_file)
     new_size = os.path.getsize(out_file)
