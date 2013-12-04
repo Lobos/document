@@ -13,7 +13,8 @@ def register_views(app):
 
 
 def register_filters(app):
-    pass
+    app.jinja_env.variable_start_string = '{{ '
+    app.jinja_env.variable_end_string = ' }}'
 
 
 def configure_develop_handlers(app):

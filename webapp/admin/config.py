@@ -5,6 +5,7 @@ class BaseConfig(object):
     DEBUG = False
     DEV = False
     SECRET_KEY = 'secret key'
+    DES_KEY = 'des_keys'
     CACHE_TYPE = "simple"
 
 

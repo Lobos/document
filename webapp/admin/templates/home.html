@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html ng-app>
+<head>
+    <title>index</title>
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet" />
+</head>
+<body>
+    <div class="header">
+        <div class="logo">
+            Administrator
+        </div>
+
+        <div class="profile">
+            <a href="javascript:"><i class="icon-user"></i> {{user.name}}</a>
+            <a href="{{ url_for('home.signout') }}"><i class="icon-signout"></i> 退出</a>
+        </div>
+
+        <a class="menu-hidden-desktop" href="javascript:"><i class="icon-reorder"></i> 菜单</a>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/lib/angular.min.js') }}" type="text/javascript"></script>
+</body>
+</html>
