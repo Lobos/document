@@ -18,10 +18,10 @@
 // Brand colors
 // -------------------------
 
-@brand-primary:         #4d90fe;
-@brand-success:         #35aa47;
-@brand-warning:         #faa937;
-@brand-danger:          #d84a38;
+@brand-primary:         #428bca;
+@brand-success:         #5cb85c;
+@brand-warning:         #f0ad4e;
+@brand-danger:          #d9534f;
 @brand-info:            #5bc0de;
 
 // Scaffolding
@@ -33,20 +33,21 @@
 // Links
 // -------------------------
 
-@link-color:            #15c;
-@link-hover-color:      #15c;
+@link-color:            @brand-primary;
+@link-hover-color:      darken(@link-color, 15%);
 
 // Typography
 // -------------------------
 
-@font-family-sans-serif:  "微软雅黑", Helvetica, Arial, sans-serif;
+@font-family-sans-serif:  "Helvetica Neue", Helvetica, Arial, sans-serif;
 @font-family-serif:       Georgia, "Times New Roman", Times, serif;
-@font-family-monospace:   Monaco, Menlo, Consolas, "Courier New", monospace;
+@font-family-monospace:   Menlo, Monaco, Consolas, "Courier New", monospace;
 @font-family-base:        @font-family-sans-serif;
 
 @font-size-base:          14px;
 @font-size-large:         ceil(@font-size-base * 1.25); // ~18px
 @font-size-small:         ceil(@font-size-base * 0.85); // ~12px
+@font-size-mini:          (@font-size-base - 3); // 11px
 
 @font-size-h1:            floor(@font-size-base * 2.6); // ~36px
 @font-size-h2:            floor(@font-size-base * 2.15); // ~30px
@@ -75,21 +76,24 @@
 // -------------------------
 // Based on 14px font-size and 1.428 line-height (~20px to start)
 
-@padding-base-vertical:          5px;
-@padding-base-horizontal:        8px;
+@padding-base-vertical:          6px;
+@padding-base-horizontal:        12px;
 
-@padding-large-vertical:         9px;
-@padding-large-horizontal:       14px;
+@padding-large-vertical:         10px;
+@padding-large-horizontal:       16px;
 
-@padding-small-vertical:         3px;
-@padding-small-horizontal:       8px;
+@padding-small-vertical:         5px;
+@padding-small-horizontal:       10px;
 
-@line-height-large:              1.3;
+@padding-xs-vertical:            1px;
+@padding-xs-horizontal:          5px;
+
+@line-height-large:              1.33;
 @line-height-small:              1.5;
 
-@border-radius-base:             2px;
-@border-radius-large:            4px;
-@border-radius-small:            1px;
+@border-radius-base:             4px;
+@border-radius-large:            6px;
+@border-radius-small:            3px;
 
 @component-active-color:         #fff;
 @component-active-bg:            @brand-primary;
@@ -157,7 +161,7 @@
 @input-color-placeholder:        @gray-light;
 
 @input-height-base:              (@line-height-computed + (@padding-base-vertical * 2) + 2);
-@input-height-large:             (floor(@font-size-large * @line-height-large) + (@padding-large-vertical * 2) + 2);
+@input-height-large:             (ceil(@font-size-large * @line-height-large) + (@padding-large-vertical * 2) + 2);
 @input-height-small:             (floor(@font-size-small * @line-height-small) + (@padding-small-vertical * 2) + 2);
 
 @legend-color:                   @gray-dark;
@@ -185,8 +189,6 @@
 @dropdown-link-disabled-color:   @gray-light;
 
 @dropdown-header-color:          @gray-light;
-
-@dropdown-caret-color:           #000;
 
 
 // COMPONENT VARIABLES
@@ -246,8 +248,13 @@
 @grid-columns:              12;
 // Padding, to be divided by two and applied to the left and right of all columns
 @grid-gutter-width:         30px;
-// Point at which the navbar stops collapsing
+
+// Navbar collapse
+
+// Point at which the navbar becomes uncollapsed
 @grid-float-breakpoint:     @screen-sm-min;
+// Point at which the navbar begins collapsing
+@grid-float-breakpoint-max: (@grid-float-breakpoint - 1);
 
 
 // Navbar
@@ -321,7 +328,6 @@
 @nav-disabled-link-hover-color:             @gray-light;
 
 @nav-open-link-hover-color:                 #fff;
-@nav-open-caret-border-color:               #fff;
 
 // Tabs
 @nav-tabs-border-color:                     #ddd;
@@ -375,19 +381,19 @@
 // Form states and alerts
 // -------------------------
 
-@state-success-text:             #468847;
+@state-success-text:             #3c763d;
 @state-success-bg:               #dff0d8;
 @state-success-border:           darken(spin(@state-success-bg, -10), 5%);
 
-@state-info-text:                #3a87ad;
+@state-info-text:                #31708f;
 @state-info-bg:                  #d9edf7;
 @state-info-border:              darken(spin(@state-info-bg, -10), 7%);
 
-@state-warning-text:             #c09853;
+@state-warning-text:             #8a6d3b;
 @state-warning-bg:               #fcf8e3;
 @state-warning-border:           darken(spin(@state-warning-bg, -10), 5%);
 
-@state-danger-text:              #b94a48;
+@state-danger-text:              #a94442;
 @state-danger-bg:                #f2dede;
 @state-danger-border:            darken(spin(@state-danger-bg, -10), 5%);
 

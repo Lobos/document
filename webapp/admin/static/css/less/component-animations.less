@@ -16,9 +16,12 @@
 }
 
 .collapse {
-  display: none;
+  position: relative;
+  height: 0;
+  overflow: hidden;
+  .transition(height 0.35s ease);
   &.in {
-    display: block;
+    height: auto;
   }
 }
 .collapsing {

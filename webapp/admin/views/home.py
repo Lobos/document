@@ -3,8 +3,9 @@
 import datetime
 from flask import Blueprint, render_template, request, session, make_response, jsonify
 from .. import db
-from . import render_json
 from ..helpers import user
+from . import render_json
+from .menu import MENU
 
 bp = Blueprint("home", __name__)
 
@@ -12,7 +13,7 @@ bp = Blueprint("home", __name__)
 @bp.route('/')
 @user.ck_signin()
 def index():
-    return render_template("home.html")
+    return render_template("home.html", admin=user.get_user(), menu=MENU)
 
 
 # == signin ========================================
@@ -35,7 +36,7 @@ def signin():
         return resp
 
     else:
-        return render_json(u'邮箱或密码不正确，登陆失败')
+        return render_json(u'邮箱和密码不匹配，登陆失败')
 
 
 @bp.route('/signout', methods=['GET', 'POST'])
