@@ -15,6 +15,9 @@ bp = Blueprint("home", __name__)
 def index():
     return render_template("home.html", admin=user.get_user(), menu=MENU)
 
+@bp.route('/test')
+def test():
+    return render_template("test.html")
 
 # == signin ========================================
 @bp.route('/signin', methods=['GET', 'POST'])

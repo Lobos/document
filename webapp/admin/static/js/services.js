@@ -1,11 +1,9 @@
 (function () {
     'use strict';
 
-    var app = angular.module('app.services', []);
-
-    app.factory('renderPartial', function () {
+    app.serviceFactory.renderPartial = function () {
         return {
             url: '1234'
         };
-    });
+    };
 })();

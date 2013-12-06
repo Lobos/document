@@ -1,6 +1,4 @@
 (function () {
-    'use strict';
-
     app.controller.signCtrl = function ($scope, $http) {
         $scope.user = {};
         $scope.url = "/";
@@ -19,24 +17,6 @@
                 }
             });
         };
-    };
-
-    app.controller.menuCtrl = function ($scope, $http, renderPartial) {
-        $scope.node = '';
-        $scope.active = function (url) {
-            $scope.node = url;
-        };
-        $scope.render = function (url) {
-            renderPartial.url = url;
-        };
-    };
-
-    app.controller.mainCtrl = function ($scope, $http, renderPartial) {
-        $scope.render = renderPartial;
-        $scope.url = '123';
-        $scope.$watch('renderPartial', function() {
-            $scope.url = $scope.render.url;
-        });
     };
 
 })();
