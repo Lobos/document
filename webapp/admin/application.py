@@ -8,8 +8,9 @@ def register_db(db):
 
 
 def register_views(app):
-    from views import home
+    from views import home, user
     app.register_blueprint(home.bp)
+    app.register_blueprint(user.bp)
 
 
 def register_filters(app):

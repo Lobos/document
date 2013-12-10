@@ -6,8 +6,9 @@
 </head>
 <body>
 <div class="login-bg">
+    <a href="home.index">home</a>
     <div class="login">
-        <form name="sign_form" novalidate ng-submit="signIn('{{ url_for('home.signin') }}')" ng-controller="signCtrl">
+        <form name="sign_form" novalidate ng-submit="signIn('{{ url_for('home.signin') }}')" ng-controller="SignCtrl">
             <legend>登录</legend>
             <div class="form-group">
                 <label>Email</label>

@@ -1,9 +1,11 @@
 (function () {
     'use strict';
 
-    app.serviceFactory.renderPartial = function () {
+    app.serviceFactory.pages = ['$http', function pages ($http) {
         return {
-            url: '1234'
+            getPage: function (url) {
+
+            }
         };
-    };
+    }];
 })();

@@ -1,7 +1,8 @@
 (function () {
-    app.controller.signCtrl = function ($scope, $http) {
+    app.controller.SignCtrl = function ($scope, $http, $location) {
         $scope.user = {};
         $scope.url = "/";
+        $scope.location = $location;
 
         $scope.signIn = function(postUrl) {
             if (!$scope.sign_form.$valid) return;

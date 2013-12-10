@@ -4,7 +4,7 @@
     <title>index</title>
     <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet" />
 </head>
-<body>
+<body ng-controller="AppCtrl">
     <div class="header">
         <div class="logo">
             Administrator
@@ -24,25 +24,25 @@
             <a class="nav-close" href="javascript:;"><i class="icon-double-angle-left"></i></a>
             <a class="nav-open" href="javascript:;"><i class="icon-double-angle-right"></i></a>
         </div>
-        <ul class="nav menu" ng-controller="menuCtrl">
+        <ul class="nav menu" ng-controller="NavCtrl">
             {% for m in menu %}
             <li ng-class="{active:node=='{{ m.url }}'}" ng-click="active('{{ m.url }}')">
                 <a class="node" href="javascript:;"><i class="icon {{ m.icon }}"></i> {{ m.title }}</a>
                 {% if m.children -%}
                 <ul class="nav" collapse="node!='{{ m.url }}'">
                     {% for s in m.children %}
-                    <li><a class="link" ng-click="render('{{ s.url }}')" href="javascript:"><i class="icon {{ s.icon }}"></i> {{ s.title }}</a></li>
+                    <li><a class="link" href="{{ s.url }}"><i class="icon {{ s.icon }}"></i> {{ s.title }}</a></li>
                     {% endfor %}
                 </ul>
                 {%- endif %}
             </li>
             {% endfor %}
+            {{loading}}
         </ul>
     </div>
 
-    <div class="main-wrapper" ng-controller="mainCtrl">
-        {{render}}
-    </div>
+    <div class="main-wrapper" ng-show="loading">Loading...</div>
+    <div class="main-wrapper" ng-hide="loading" ng-include="currentPage"></div>
 
     {% include("scripts.html") %}
 </body>
