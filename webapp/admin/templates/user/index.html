@@ -1,1 +1,38 @@
-abcdefg
+<div ng-controller="TableCtrl" ng-init="url='{{ url_for("user.table") }}';update();">
+    <div class="actions">
+        <button class="btn"><i class="icon icon-plus"></i> 新建</button>
+        <button ng-click="update()" class="btn"><i class="icon icon-refresh"></i> 刷新</button>
+        <button class="btn"><i class="icon icon-trash"></i> 删除选中</button>
+    </div>
+    <div class="page-container scrollable">
+        <table class="table table-listed table-hover">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>登录名</th>
+                    <th>邮箱</th>
+                    <th>角色</th>
+                    <th>状态</th>
+                    <th>最后登录IP</th>
+                    <th style="width: 180px;">最后登录时间</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="item in data">
+                    <td></td>
+                    <td>{{item.name}}</td>
+                    <td>{{item.email}}</td>
+                    <td>{{item.role_name}}</td>
+                    <td>{{item.status}}</td>
+                    <td>{{item.signin_ip}}</td>
+                    <td>{{item.signin_time}}</td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="7"></td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>

@@ -1,7 +1,9 @@
 # -*- coding:utf-8 -*-
 
 from flask import Blueprint, request, jsonify, render_template
+from bson import ObjectId
 from ..helpers.user import ck_auth
+from ..helpers import html
 from .. import db
 from . import render_json
 
@@ -10,13 +12,11 @@ bp = Blueprint('user', __name__)
 @bp.route('/user/index')
 #@ck_auth('user.edit', 'html')
 def index():
-    import time
-    time.sleep(5)
     return render_template('user/index.html')
 
 
 @bp.route('/user/table', methods=['POST', 'GET'])
-@ck_auth('user.edit', 'html')
+#@ck_auth('user.edit', 'html')
 def table():
     filters = html.get_filters('name')
 
@@ -40,7 +40,7 @@ def edit(_id=None):
         model = db.User
     else:
         model = db.User.get_from_id(_id)
-    return render('user/edit.html', model=model)
+    return render_template('user/edit.html', model=model)
 
 
 @bp.route('/user/save', methods=['POST'])
