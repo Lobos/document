@@ -21,9 +21,12 @@
     };
 
     app.controller.NavCtrl = function ($scope) {
-        $scope.node = '';
-        $scope.active = function (url) {
-            $scope.node = url;
+        $scope.node = {};
+        $scope.active = function (url, isNode) {
+            if (isNode)
+                $scope.node[url] = !$scope.node[url];
+            else
+                $scope.highlight = url;
         };
     };
 

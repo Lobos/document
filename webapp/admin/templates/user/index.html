@@ -1,10 +1,14 @@
 <div ng-controller="TableCtrl" ng-init="url='{{ url_for("user.table") }}';update();">
-    <div class="actions">
-        <button class="btn"><i class="icon icon-plus"></i> 新建</button>
-        <button ng-click="update()" class="btn"><i class="icon icon-refresh"></i> 刷新</button>
-        <button class="btn"><i class="icon icon-trash"></i> 删除选中</button>
+    <div class="page-header">
+        <h3>用户管理 <small><i class="icon icon-angle-double-right"></i> 用户列表</small></h3>
+
+        <div class="buttons">
+            <a ng-click="update()" class="btn btn-default"><i class="icon icon-refresh"></i> 刷新</a>
+            <a class="btn btn-default" href="user.edit"><i class="icon icon-plus"></i> 新建</a>
+            <a class="btn btn-default"><i class="icon icon-trash-o"></i> 删除选中</a>
+        </div>
     </div>
-    <div class="page-container scrollable">
+    <div class="page-content scrollable">
         <table class="table table-listed table-hover">
             <thead>
                 <tr>

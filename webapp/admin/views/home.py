@@ -13,7 +13,7 @@ bp = Blueprint("home", __name__)
 @bp.route('/')
 @bp.route('/<module>.<ctrl>')
 @user.ck_signin()
-def index(module, ctrl):
+def index(module=None, ctrl=None):
     return render_template("home.html", admin=user.get_user(), menu=MENU)
 
 @bp.route('/test')
