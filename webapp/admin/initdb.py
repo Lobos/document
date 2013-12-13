@@ -4,7 +4,7 @@ from mongokit import Database, Connection
 from ..models import User, Role, Icon
 from .config import DefaultConfig
 from datetime import datetime
-#from ..views.menu import get_admin_auth_list
+from views.menu import get_admin_auth_list
 
 
 def init_db(host=None, port=None, database=None):
@@ -18,8 +18,7 @@ def init_db(host=None, port=None, database=None):
     role = db.Role()
     role['name'] = u'管理员'
     role['is_admin'] = True
-    #role['admin_auth_list'] = get_admin_auth_list()
-    role['admin_auth_list'] = []
+    role['admin_auth_list'] = get_admin_auth_list()
     role.save()
 
     user = db.User()

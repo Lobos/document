@@ -15,7 +15,7 @@ MENU = [
             {
                 'title': u'用户管理',
                 'icon': 'icon-user',
-                'url': 'user.index',
+                'url': 'user.list',
                 'children': [
                     { 'title': u'修改', 'url': 'user.edit' },
                     { 'title': u'删除', 'url': 'user.remove' }

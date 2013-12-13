@@ -9,14 +9,14 @@ from . import render_json
 
 bp = Blueprint('user', __name__)
 
-@bp.route('/user/index')
-#@ck_auth('user.edit', 'html')
-def index():
-    return render_template('user/index.html')
+@bp.route('/user/list')
+@ck_auth('user.edit', 'html')
+def list():
+    return render_template('user/list.html')
 
 
 @bp.route('/user/table', methods=['POST', 'GET'])
-#@ck_auth('user.edit', 'html')
+@ck_auth('user.edit', 'html')
 def table():
     filters = html.get_filters('name')
 
@@ -32,7 +32,7 @@ def table():
     return html.get_table(models, ks, 'name')
 
 
-@bp.route('/user/edit/')
+@bp.route('/user/add')
 @bp.route('/user/edit/<ObjectId:_id>')
 @ck_auth('user.edit', 'html')
 def edit(_id=None):
