@@ -1,0 +1,23 @@
+{% from "_context.html" import formgroup, input %}
+<div ng-controller="EditCtrl">
+    <div class="page-header">
+        <h3>用户管理 <small><i class="icon icon-angle-double-right"></i> 用户编辑</small></h3>
+
+        <div class="buttons btn-group">
+            <a class="btn btn-success"><i class="icon icon-save"></i> 保存</a>
+            <a class="btn btn-default"><i class="icon icon-reply"></i> 取消</a>
+        </div>
+    </div>
+    <div class="page-content scrollable">
+        {% set _f = "formUser" %}
+        <form class="form-horizontal" novalidate name="{{ _f }}" role="form">
+            {% call formgroup('Email', size=[2,5]) %}
+                {{ input("email", type="email", form=_f, validate=["required", "type"]) }}
+            {% endcall %}
+
+            {% call formgroup('密码', size=[2,4]) %}
+                {{ input("password", type="password", form=_f, validate=["required", "type"]) }}
+            {% endcall %}
+        </form>
+    </div>
+</div>

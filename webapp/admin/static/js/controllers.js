@@ -83,4 +83,7 @@
 
     };
 
+    app.controller.EditCtrl = function ($scope, $http, $attrs, $location) {
+
+    }
 })();

@@ -1,0 +1,28 @@
+{% macro pagination() -%}
+<div class="pagination-wrapper">
+    <pagination total-items="total" page="page" items-per-page="size" max-size="pageSize" on-select-page="selectPage(page)" class="pagination-small" boundary-links="true" rotate="false"></pagination>
+    <span>共 {{total}} 条，当前 {{(page-1)*size+1}}-{{(page*size)>total?total:(page*size)}}</span>
+</div>
+{%- endmacro %}
+
+
+{% macro formgroup(label='', size=[2,10]) -%}
+    <div class="form-group">
+        <label class="col-sm-{{ size[0] }} control-label">{{ label }}</label>
+        <div class="col-sm-{{ size[1] }}">
+            {{ caller() }}
+        </div>
+    </div>
+{%- endmacro %}
+
+
+{% macro input(name='', form='', type='text', class='form-control', placeholder='', validate=[]) -%}
+    <input name="{{ name }}" type="{{ type }}" class="{{ class }}" placeholder="{{ placeholder }}">
+    {%- for v in validate -%}
+        {% if v == "required" -%}
+        <span class="text-danger help-block" ng-show="{{ form }}.{{ name }}.$dirty && {{ form }}.{{ name }}.$error.required">必填</span>
+        {% elif v == 'type' %}
+        <span class="text-danger help-block" ng-show="{{ form }}.{{ name }}.$error.{{ type }}">格式不正确!</span>
+        {%- endif %}
+    {%- endfor -%}
+{%- endmacro %}
