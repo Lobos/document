@@ -12,7 +12,7 @@
             $scope.loading = false;
         };
 
-        $scope.$watch(function () { return $location.path(); }, function (path) {
+        $scope.$watch(function () { return $location.url(); }, function (path) {
             if (path == '/') return;
             path = path.replace(/\./g, '/');
             $scope.currentPage = path;
@@ -83,7 +83,24 @@
 
     };
 
-    app.controller.EditCtrl = function ($scope, $http, $attrs, $location) {
+    app.controller.EditCtrl = function ($scope, $window, $http, $location) {
+        $scope.$location = $location;
+        $scope.model = {};
 
+        $scope.getEntry = function (url) {
+            if (!$location.hash()) return;
+            $http.post(url).success(function (json) {
+                if (json.status) $scope.model = json.model;
+            });
+        };
+
+        $scope.back = function () {
+            $window.history.back();
+        };
+
+        $scope.submit = function () {
+            if (!$scope.form.$valid) return;
+            $scope.sending = true;
+        };
     }
 })();

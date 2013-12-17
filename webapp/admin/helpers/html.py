@@ -5,7 +5,7 @@ from datetime import datetime
 from bson import ObjectId
 from functools import wraps
 from flask import request, jsonify, request
-from webapp.utils.general import format_datetime
+from . import format_datetime
 from ..views import render_json
 
 
@@ -39,7 +39,8 @@ def clone_property(model, form, *keys):
 
     return model
 
-def get_table(models, ks = [], sort = '_id'):
+
+def get_table(models, ks=[], sort='_id'):
     '''获取列表
     ks:要显示的列名
     sort:默认排序的字段'''
@@ -61,6 +62,21 @@ def get_table(models, ks = [], sort = '_id'):
         'total': total,
         'page': page,
         'data': data
+    }
+    return jsonify(context)
+
+
+def get_entry(model, ks):
+    data = {}
+
+    for k in ks:
+        if type(k) is type(''):
+            k = [k]
+        data['_'.join(k)] = _fmt(model, k)
+
+    context = {
+        'status': 1,
+        'model': data
     }
     return jsonify(context)
 

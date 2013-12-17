@@ -1,11 +1,11 @@
 {% from "_context.html" import pagination %}
-<div ng-controller="TableCtrl" url="{{ url_for("user.table") }}" ng-init="update();">
+<div ng-controller="TableCtrl" url="{{ url_for("user.list") }}" ng-init="update();">
     <div class="page-header">
         <h3>用户管理 <small><i class="icon icon-angle-double-right"></i> 用户列表</small></h3>
 
         <div class="buttons btn-group">
             <a class="btn btn-default" ng-click="update()"><i class="icon icon-refresh"></i> 刷新</a>
-            <a class="btn btn-success" href="user.add"><i class="icon icon-plus"></i> 新建</a>
+            <a class="btn btn-success" href="user.edit"><i class="icon icon-plus"></i> 新建</a>
             <a class="btn btn-danger"><i class="icon icon-trash-o"></i> 删除</a>
         </div>
     </div>
@@ -13,7 +13,8 @@
         <table class="table table-listed table-hover">
             <thead>
                 <tr>
-                    <th><input ng-model="allSelected" ng-click="selectAll($event)" type="checkbox" /></th>
+                    <th style="width: 20px;"><input ng-model="allSelected" ng-click="selectAll($event)" type="checkbox" /></th>
+                    <th style="width: 20px;"></th>
                     <th>登录名</th>
                     <th>邮箱</th>
                     <th>角色</th>
@@ -25,6 +26,7 @@
             <tbody>
                 <tr ng-repeat="item in data">
                     <td><input ng-model="item._isChecked" type="checkbox" /></td>
+                    <td><a href="user.edit#{{item._id}}"><i class="icon icon-edit"></i></a></td>
                     <td>{{item.name}}</td>
                     <td>{{item.email}}</td>
                     <td>{{item.role_name}}</td>

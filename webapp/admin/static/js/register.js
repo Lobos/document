@@ -4,8 +4,9 @@
     angular.module('app', [
             'ui.bootstrap'
         ]).
-        config(function($locationProvider) {
+        config(function($locationProvider, $compileProvider) {
             $locationProvider.html5Mode(true).hashPrefix('!');
+            $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|file|tel):/);
         }).
         factory(app.serviceFactory).
         directive(app.directive).

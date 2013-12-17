@@ -1,23 +1,52 @@
 {% from "_context.html" import formgroup, input %}
-<div ng-controller="EditCtrl">
+{% set _form = "form" %}
+<div ng-controller="EditCtrl" ng-init="getEntry('{{ url_for(".edit") }}' + $location.hash())" url="{{ url_for('.save') }}">
     <div class="page-header">
         <h3>用户管理 <small><i class="icon icon-angle-double-right"></i> 用户编辑</small></h3>
 
         <div class="buttons btn-group">
-            <a class="btn btn-success"><i class="icon icon-save"></i> 保存</a>
-            <a class="btn btn-default"><i class="icon icon-reply"></i> 取消</a>
+            <a ng-disabled="{{ _form }}.$invalid" class="btn btn-success"><i class="icon icon-save"></i> 保存</a>
+            <a ng-click="back()" class="btn btn-default"><i class="icon icon-reply"></i> 取消</a>
         </div>
     </div>
     <div class="page-content scrollable">
-        {% set _f = "formUser" %}
-        <form class="form-horizontal" novalidate name="{{ _f }}" role="form">
+        <form class="form-horizontal" ng-submit="submit()" novalidate name="{{ _form }}" role="form">
             {% call formgroup('Email', size=[2,5]) %}
-                {{ input("email", type="email", form=_f, validate=["required", "type"]) }}
+                {{ input("email", type="email", model="model.email", form=_form, required=True) }}
+            {% endcall %}
+
+            {% call formgroup('昵称', size=[2,5]) %}
+                {{ input("name", model="model.name", form=_form, required=True, minlength=2, maxlength=20) }}
             {% endcall %}
 
             {% call formgroup('密码', size=[2,4]) %}
-                {{ input("password", type="password", form=_f, validate=["required", "type"]) }}
+                {{ input("password", type="password", model="model.password", form=_form) }}
+            {% endcall %}
+
+            {% call formgroup('重复密码', size=[2,4]) %}
+                {{ input("confirm_password", type="password", model="model.confirm_password", form=_form) }}
+            {% endcall %}
+
+            {% call formgroup('角色', size=[2, 4]) %}
+                <select class="form-control" name="role__id" required ng-model="model.role__id">
+                    {% for r in roles -%}
+                    <option value="{{ r._id }}">{{ r.name }}</option>
+                    {%- endfor %}
+                </select>
+            {% endcall %}
+
+            {% call formgroup() %}
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" ng-model="model.status" /> 启用
+                    </label>
+                </div>
+            {% endcall %}
+
+            {% call formgroup() %}
+                <button ng-disabled="{{ _form }}.$invalid" class="btn btn-success"><i class="icon icon-save"></i> 保存</button>
             {% endcall %}
         </form>
+        {{$location.hash()}}
     </div>
 </div>
