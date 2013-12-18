@@ -18,6 +18,13 @@
         <a class="menu-hidden-desktop" href="javascript:"><i class="icon-reorder"></i> 菜单</a>
     </div>
 
+    <div class="message-top" ng-controller="MessageCtrl">
+        <div ng-repeat="inform in informs" class="alert {{inform.alertClass}} {{inform.dismiss>0?'alert-dismissable':''}} fade in informer">
+            <button ng-show="inform.dismiss>0" type="button" ng-click="close($index)" class="close">×</button>
+            {{inform.message}}
+        </div>
+    </div>
+
     <div ng-class="{'main-nav':true, 'full':mainFolded}">
         <div class="caption">
             <span>Navigation</span>
@@ -42,5 +49,6 @@
     <div ng-class="{'page-wrapper':true, 'slide-reveal':true, 'full':mainFolded}" onload="afterPageLoad()" ng-hide="loading" ng-include="currentPage"></div>
 
     {% include("scripts.html") %}
+
 </body>
 </html>

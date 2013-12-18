@@ -20,6 +20,13 @@
         });
     };
 
+    app.controller.MessageCtrl = function ($scope, messages) {
+        $scope.informs = messages.get();
+        $scope.close = function (index) {
+            messages.close(index);
+        };
+    };
+
     app.controller.NavCtrl = function ($scope) {
         $scope.node = {};
         $scope.active = function (url, isNode) {
@@ -83,7 +90,7 @@
 
     };
 
-    app.controller.EditCtrl = function ($scope, $window, $http, $location) {
+    app.controller.EditCtrl = function ($scope, $window, $attrs, $http, $location, messages) {
         $scope.$location = $location;
         $scope.model = {};
 
@@ -98,9 +105,20 @@
             $window.history.back();
         };
 
-        $scope.submit = function () {
+        $scope.submit = function (url) {
             if (!$scope.form.$valid) return;
             $scope.sending = true;
+            messages.inform('保存中，请稍后...');
+
+            $http.post(url, $scope.model).success(function (json) {
+                if (json.status == 1) {
+                    $scope.sending = false;
+                    messages.inform(json.msg, 5, 'success');
+                    $scope.back();
+                } else {
+                    messages.inform(json.msg, 10, 'error');
+                }
+            });
         };
     }
 })();

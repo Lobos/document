@@ -1,16 +1,16 @@
 {% from "_context.html" import formgroup, input %}
 {% set _form = "form" %}
-<div ng-controller="EditCtrl" ng-init="getEntry('{{ url_for(".edit") }}' + $location.hash())" url="{{ url_for('.save') }}">
+<div ng-controller="EditCtrl" ng-init="getEntry('{{ url_for(".edit") }}' + $location.hash())">
     <div class="page-header">
         <h3>用户管理 <small><i class="icon icon-angle-double-right"></i> 用户编辑</small></h3>
 
         <div class="buttons btn-group">
-            <a ng-disabled="{{ _form }}.$invalid" class="btn btn-success"><i class="icon icon-save"></i> 保存</a>
+            <a ng-disabled="{{ _form }}.$invalid || sending" class="btn btn-success"><i class="icon icon-save"></i> 保存</a>
             <a ng-click="back()" class="btn btn-default"><i class="icon icon-reply"></i> 取消</a>
         </div>
     </div>
     <div class="page-content scrollable">
-        <form class="form-horizontal" ng-submit="submit()" novalidate name="{{ _form }}" role="form">
+        <form class="form-horizontal" ng-submit="submit('{{ url_for('.save') }}')" novalidate name="{{ _form }}" role="form">
             {% call formgroup('Email', size=[2,5]) %}
                 {{ input("email", type="email", model="model.email", form=_form, required=True) }}
             {% endcall %}
@@ -20,11 +20,12 @@
             {% endcall %}
 
             {% call formgroup('密码', size=[2,4]) %}
-                {{ input("password", type="password", model="model.password", form=_form) }}
+                {{ input("password", type="password", model="model.password", form=_form, minlength=6, maxlength=18) }}
             {% endcall %}
 
             {% call formgroup('重复密码', size=[2,4]) %}
-                {{ input("confirm_password", type="password", model="model.confirm_password", form=_form) }}
+                <input class="form-control" ng-model='model.confirm_password' type="password" name='confirm_password' match="model.password" />
+                <span class="help-block" ng-show="{{ _form }}.confirm_password.$error.mismatch">两次密码输入不一致！</span>
             {% endcall %}
 
             {% call formgroup('角色', size=[2, 4]) %}
@@ -44,9 +45,8 @@
             {% endcall %}
 
             {% call formgroup() %}
-                <button ng-disabled="{{ _form }}.$invalid" class="btn btn-success"><i class="icon icon-save"></i> 保存</button>
+                <button ng-disabled="{{ _form }}.$invalid || sending" class="btn btn-success"><i class="icon icon-save"></i> 保存</button>
             {% endcall %}
         </form>
-        {{$location.hash()}}
     </div>
 </div>

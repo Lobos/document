@@ -23,15 +23,15 @@
            {% if model %}ng-model="{{ model }}"{% endif %} {% if pattern %}ng-pattern="{{ pattern }}"{% endif %}
            {% if minlength > 0 %}ng-minlength="{{ minlength }}" {% endif %} {% if maxlength > 0 %}ng-maxlength="{{ maxlength }}" {% endif %} />
     {%- if required -%}
-        <span class="text-danger help-block" ng-show="{{ form }}.{{ name }}.$dirty && {{ form }}.{{ name }}.$error.required">不能为空！</span>
+        <span class="help-block" ng-show="{{ form }}.{{ name }}.$dirty && {{ form }}.{{ name }}.$error.required">不能为空！</span>
     {%- endif -%}
     {%- if type != 'text' -%}
-        <span class="text-danger help-block" ng-show="{{ form }}.{{ name }}.$error.{{ type }}">格式不正确！</span>
+        <span class="help-block" ng-show="{{ form }}.{{ name }}.$error.{{ type }}">格式不正确！</span>
     {%- endif -%}
     {%- if minlength > 0 -%}
-        <span class="text-danger help-block" ng-show="{{ form }}.{{ name }}.$error.minlength">长度不能少于{{ minlength }}个字符！</span>
+        <span class="help-block" ng-show="{{ form }}.{{ name }}.$error.minlength">长度不能少于{{ minlength }}个字符！</span>
     {%- endif -%}
     {%- if maxlength > 0 -%}
-        <span class="text-danger help-block" ng-show="{{ form }}.{{ name }}.$error.maxlength">长度不能大于{{ maxlength }}个字符！</span>
+        <span class="help-block" ng-show="{{ form }}.{{ name }}.$error.maxlength">长度不能大于{{ maxlength }}个字符！</span>
     {%- endif -%}
 {%- endmacro -%}

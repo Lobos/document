@@ -68,7 +68,7 @@ def save():
 
     model['name'] = f.get('name')
     model['email'] = f.get('email')
-    if len(f.get('password')) > 0:
+    if f.get('password'):
         model['password'] = db.User.encode_pwd(f.get('password'))
     if f.get('role__id'):
         model['role'] = db.Role.get_from_id(ObjectId(f.get('role__id')))

@@ -34,6 +34,15 @@ html, body {
 }
 
 
+.message-top {
+  position: fixed;
+  left: 50%;
+  width: 320px;
+  margin: 20px 0 0 -160px;
+  z-index: 999;
+}
+
+
 .header {
   height: @header-height;
   background-color: #333333;
@@ -42,7 +51,7 @@ html, body {
   top: 0;
   left: 0;
   right: 0;
-  z-index: 999;
+  z-index: 998;
 
 
   a {
@@ -59,9 +68,9 @@ html, body {
 
   .profile {
     line-height: @header-height;
-    position: relative;
-    padding: 0 10px 0 54px;
-    float: right;
+    position: absolute;
+    top: 0;
+    right: 10px;
 
     a {
       margin-left: 12px;
@@ -233,72 +242,11 @@ html, body {
       top: 10px;
 
       a {
-        display: inline-block;
         text-decoration: none;
-        /*
-        cursor: pointer;
-        background-clip: border-box;
-        color: @btn-default-color;
-        .button-size(@padding-base-vertical; (@padding-base-horizontal + 4); @font-size-base; @line-height-computed; @border-radius-base);
-        display: inline-block;
-        text-decoration: none;
-        border: solid 1px transparent;
-
-        &:hover {
-          #gradient > .vertical(@start-color: #f8f8f8; @end-color: #f1f1f1);
-          text-shadow: none;
-          background-color: @btn-default-bg;
-          border-color: #c6c6c6;
-          background-position: 0 0;
-          .box-shadow(0 0px 0px rgba(0,0,0,0.1));
-          .transition(none);
-        }
-
-        &:active, &.active {
-          border: 1px solid @btn-default-border;
-          #gradient > .vertical(@start-color: #f6f6f6; @end-color: #f1f1f1);
-          background-color: #e8e8e8;
-          text-shadow: 0 1px 0 #fff;
-          .box-shadow(inset 0 1px 2px rgba(0, 0, 0, 0.1));
-        }\
-        */
       }
     }
   }
 
-  /*
-  .page-button {
-    //bottom: 0;
-    //top: 65px;
-    position: relative;
-    margin: 0;
-    z-index: 990;
-    padding: 6px 10px 4px;
-    background-color: @gray-background;
-    border-bottom: solid 1px #e9e9e9;
-    .clearfix();
-
-    .btn {
-      font-weight: normal;
-      border-color: transparent;
-      background-color: @gray-background;
-
-      &:hover, &:active, &:focus {
-        border-color: @btn-default-border;
-      }
-
-
-      &:active,
-      &.active {
-        .box-shadow(inset 0 1px 2px rgba(0, 0, 0, 0.1));
-      }
-    }
-
-    .right {
-      float: right;
-    }
-  }
-  */
 
   .page-content {
     padding: 20px;
