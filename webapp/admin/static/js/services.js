@@ -1,47 +1,57 @@
 (function () {
     'use strict';
 
-    app.serviceFactory.messages = function ($timeout) {
+    app.serviceFactory.$message = function ($timeout) {
         var informs = [];
-
-        var removeInform = function (val) {
-            var index = -1;
-            for (var i = 0; i < informs.length; i++) {
-               if (informs[i] === val)
-                index = i;
-            }
-            if (index >= -1)
-                informs.splice(index, 1);
-        };
+        var timer;
 
         return {
             get: function () {
                 return informs;
             },
-            inform: function (message, dismiss, type) {
-                if (!angular.isDefined(dismiss)) {
-                    dismiss = 0;
+            inform: function (message, type, dismiss) {
+                if (!angular.isDefined(type)) {
                     type = 'warning';
-                } else if (angular.isString(dismiss)) {
-                    type = dismiss;
-                    dismiss = 0;
+                    dismiss = 6;
+                } else if (angular.isNumber(type)) {
+                    dismiss = type;
+                    type = 'warning';
                 }
-                type = type || 'warning';
-                var obj = {
+                if (!angular.isDefined(dismiss))
+                    dismiss = 6;
+                informs[0] = {
                     alertClass: 'alert-' + type,
                     message: message,
                     dismiss: dismiss
                 };
-                informs.push(obj);
 
-                if (dismiss > 0)
-                    $timeout(function (){ removeInform(obj); }, dismiss * 1000);
+                if (dismiss != 0)
+                    timer = $timeout(function () {
+                        informs.splice(0, 1);
+                    }, dismiss * 1000);
+                else
+                    $timeout.cancel(timer);
             },
             close: function (index) {
                 informs.splice(index, 1);
             },
             clear: function () {
-                informs = [];
+                informs.splice(0, 1);
+            }
+        };
+    };
+
+    app.serviceFactory.$loading = function ($timeout) {
+        var loading = 0;
+        return {
+            get: function () {
+                return loading;
+            },
+            start: function () {
+                loading++;
+            },
+            end: function () {
+                loading--;
             }
         };
     };

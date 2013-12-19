@@ -4,26 +4,26 @@
     /*
     即使用不到$location，也要在参数中传入，否则 href 不会 rewrite
      */
-    app.controller.AppCtrl = function ($scope, $location) {
+    app.controller.AppCtrl = function ($scope, $location, $loading) {
         $scope.currentPage = '';
-        $scope.loading = false;
+        $scope.loading = $loading.get;
 
         $scope.afterPageLoad = function () {
-            $scope.loading = false;
+            $loading.end();
         };
 
         $scope.$watch(function () { return $location.url(); }, function (path) {
             if (path == '/') return;
             path = path.replace(/\./g, '/');
             $scope.currentPage = path;
-            $scope.loading = true;
+            $loading.start();
         });
     };
 
-    app.controller.MessageCtrl = function ($scope, messages) {
-        $scope.informs = messages.get();
+    app.controller.MessageCtrl = function ($scope, $message) {
+        $scope.informs = $message.get();
         $scope.close = function (index) {
-            messages.close(index);
+            $message.close(index);
         };
     };
 
@@ -37,7 +37,7 @@
         };
     };
 
-    app.controller.TableCtrl = function ($scope, $http, $attrs, $location) {
+    app.controller.TableCtrl = function ($scope, $http, $attrs, $location, $modal, $message, $loading) {
         $scope.url = $attrs.url;
         $scope.page = $attrs.page || $location.search()['p'] || 1;
         $scope.size = $attrs.size || 30;
@@ -71,12 +71,14 @@
 
         //update
         $scope.update = function () {
+            $loading.start();
             $scope.allSelected = false;
             var data = {
                 page: $scope.page,
                 size: $scope.size
             };
             $http.post($scope.url, data).success(function (json) {
+                $loading.end();
                 if (json.status == 1) {
                     $scope.page = json.page;
                     $scope.total = json.total;
@@ -88,9 +90,39 @@
             });
         };
 
+        $scope.remove = function () {
+            var length = $scope.getSelection().length;
+
+            if (length == 0) {
+                $message.inform('至少选择一个项目', 'danger');
+                return;
+            }
+
+            var rm = function () {
+                $loading.start();
+                //$message.inform('处理中...', 0);
+            };
+
+            $modal.open({
+                templateUrl: "/static/templates/confirm.html",
+                backdrop: true,
+                windowClass: 'modal',
+                controller: function ($scope, $modalInstance) {
+                    $scope.content = '确定要删除这 ' + length + ' 个吗？';
+                    $scope.submit = function () {
+                        rm();
+                        $modalInstance.dismiss('cancel');
+                    };
+                    $scope.cancel = function () {
+                        $modalInstance.dismiss('cancel');
+                    };
+                }
+            });
+        };
+
     };
 
-    app.controller.EditCtrl = function ($scope, $window, $attrs, $http, $location, messages) {
+    app.controller.EditCtrl = function ($scope, $window, $attrs, $http, $location, $message, $loading) {
         $scope.$location = $location;
         $scope.model = {};
 
@@ -107,18 +139,19 @@
 
         $scope.submit = function (url) {
             if (!$scope.form.$valid) return;
-            $scope.sending = true;
-            messages.inform('保存中，请稍后...');
+            $loading.start();
 
             $http.post(url, $scope.model).success(function (json) {
+                $loading.end();
                 if (json.status == 1) {
-                    $scope.sending = false;
-                    messages.inform(json.msg, 5, 'success');
+                    $message.inform(json.msg);
                     $scope.back();
                 } else {
-                    messages.inform(json.msg, 10, 'error');
+                    $message.inform(json.msg, 'danger');
                 }
             });
         };
-    }
+    };
+
 })();
+

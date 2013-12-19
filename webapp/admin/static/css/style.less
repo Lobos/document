@@ -34,12 +34,41 @@ html, body {
 }
 
 
+.loading {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background-color: #ffffff;
+  .opacity(0.5);
+  z-index: 1000;
+  img {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin: -16px 0 0 -16px;
+  }
+}
+
+
 .message-top {
   position: fixed;
-  left: 50%;
-  width: 320px;
-  margin: 20px 0 0 -160px;
-  z-index: 999;
+  text-align: center;
+  width: 100%;
+  z-index: 1001;
+  top: @header-height;
+
+  .alert {
+    padding: 4px 8px;
+    display: inline-block;
+    max-width: 320px;
+    .box-shadow(0 2px 4px rgba(0,0,0,0.2));
+  }
+
+  .alert-dismissable {
+    padding-right: (@alert-padding + 20);
+  }
 }
 
 

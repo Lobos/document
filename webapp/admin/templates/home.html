@@ -19,8 +19,8 @@
     </div>
 
     <div class="message-top" ng-controller="MessageCtrl">
-        <div ng-repeat="inform in informs" class="alert {{inform.alertClass}} {{inform.dismiss>0?'alert-dismissable':''}} fade in informer">
-            <button ng-show="inform.dismiss>0" type="button" ng-click="close($index)" class="close">×</button>
+        <div ng-repeat="inform in informs" class="alert {{inform.alertClass}} {{inform.dismiss!=0?'alert-dismissable':''}} fade in informer">
+            <button ng-show="inform.dismiss!=0" type="button" ng-click="close($index)" class="close">×</button>
             {{inform.message}}
         </div>
     </div>
@@ -45,8 +45,16 @@
         </ul>
     </div>
 
-    <div ng-class="{'page-wrapper':true, 'full':mainFolded}" ng-show="loading">Loading...</div>
     <div ng-class="{'page-wrapper':true, 'slide-reveal':true, 'full':mainFolded}" onload="afterPageLoad()" ng-hide="loading" ng-include="currentPage"></div>
+
+    <div ng-show="loading()>0">
+        <div class="loading"></div>
+        <div class="message-top">
+            <div class="alert alert-warning fade in">
+                处理中...
+            </div>
+        </div>
+    </div>
 
     {% include("scripts.html") %}
 

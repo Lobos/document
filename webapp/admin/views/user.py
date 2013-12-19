@@ -84,7 +84,7 @@ def save():
 
 @bp.route('/user/remove', methods=['POST'])
 @ck_auth('user.remove', 'json')
-#@html.remove()
+@html.remove()
 def remove(ids):
     db.user.remove({'_id': {'$in':ids}})
     return render_json(u' 成功删除.', 1)

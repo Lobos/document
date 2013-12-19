@@ -21,11 +21,11 @@ def remove():
     def decorator(f):
         @wraps(f)
         def func():
-            ids = request.form.get('ids')
+            ids = request.json.get('ids')
             if not ids:
                 return render_json(u'参数不能为空')
             try:
-                ids = [ObjectId(_id) for _id in ids.split(',')]
+                ids = [ObjectId(_id) for _id in ids]
             except Exception:
                 return render_json(u'非法参数')
             return f(ids)

@@ -6,7 +6,7 @@
         <div class="buttons btn-group">
             <a class="btn btn-default" ng-click="update()"><i class="icon icon-refresh"></i> 刷新</a>
             <a class="btn btn-success" href="user.edit"><i class="icon icon-plus"></i> 新建</a>
-            <a class="btn btn-danger"><i class="icon icon-trash-o"></i> 删除</a>
+            <a class="btn btn-danger" ng-click="remove()"><i class="icon icon-trash-o"></i> 删除</a>
         </div>
     </div>
     <div class="page-content scrollable">
@@ -37,6 +37,5 @@
             </tbody>
         </table>
         {{ pagination() }}
-        {{getSelection()|json}}
     </div>
 </div>
