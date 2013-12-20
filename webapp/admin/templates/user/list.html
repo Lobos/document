@@ -6,7 +6,10 @@
         <div class="buttons btn-group">
             <a class="btn btn-default" ng-click="update()"><i class="icon icon-refresh"></i> 刷新</a>
             <a class="btn btn-success" href="user.edit"><i class="icon icon-plus"></i> 新建</a>
-            <a class="btn btn-danger" ng-click="remove()"><i class="icon icon-trash-o"></i> 删除</a>
+            <a class="btn btn-danger" ng-click="remove('{{ url_for("user.remove") }}')">
+                <i class="icon icon-trash-o"></i> 删除
+                <div ng-show="noSelected" class="tip-in alert alert-danger">至少选择一个项目</div>
+            </a>
         </div>
     </div>
     <div class="page-content scrollable">

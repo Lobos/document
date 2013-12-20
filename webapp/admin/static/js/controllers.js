@@ -37,7 +37,7 @@
         };
     };
 
-    app.controller.TableCtrl = function ($scope, $http, $attrs, $location, $modal, $message, $loading) {
+    app.controller.TableCtrl = function ($scope, $http, $attrs, $location, $modal, $message, $loading, $timeout) {
         $scope.url = $attrs.url;
         $scope.page = $attrs.page || $location.search()['p'] || 1;
         $scope.size = $attrs.size || 30;
@@ -90,17 +90,24 @@
             });
         };
 
-        $scope.remove = function () {
-            var length = $scope.getSelection().length;
+        $scope.remove = function (url) {
+            var selects = $scope.getSelection();
+            var length = selects.length;
 
             if (length == 0) {
-                $message.inform('至少选择一个项目', 'danger');
+                $scope.noSelected = true;
+                $timeout(function () { $scope.noSelected=false; }, 4000);
                 return;
             }
+            $scope.noSelected = false;
 
             var rm = function () {
                 $loading.start();
-                //$message.inform('处理中...', 0);
+                $http.post(url, {ids: selects}).success(function (json) {
+                    $loading.end();
+                    $scope.update();
+                    $message.inform(json.msg);
+                });
             };
 
             $modal.open({

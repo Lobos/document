@@ -4,7 +4,7 @@ from flask import Flask
 from flask.ext.mongokit import MongoKit
 from flask.ext.cache import Cache
 from config import DefaultConfig
-from application import register_views, register_db, register_filters
+from application import register_views, register_db, register_filters, configure_errorhandlers
 
 app = Flask(__name__)
 app.config.from_object(DefaultConfig)
@@ -14,3 +14,4 @@ cache = Cache(app)
 register_views(app)
 register_db(db)
 register_filters(app)
+configure_errorhandlers(app)

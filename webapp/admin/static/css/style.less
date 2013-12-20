@@ -41,7 +41,7 @@ html, body {
   top: 0;
   bottom: 0;
   background-color: #ffffff;
-  .opacity(0.5);
+  .opacity(0.3);
   z-index: 1000;
   img {
     position: absolute;
@@ -55,14 +55,18 @@ html, body {
 .message-top {
   position: fixed;
   text-align: center;
-  width: 100%;
+  //width: 100%;
+  max-width: 320px;
   z-index: 1001;
   top: @header-height;
+  margin: auto;
+  left: 0;
+  right: 0;
 
   .alert {
+    margin: 0 auto;
     padding: 4px 8px;
     display: inline-block;
-    max-width: 320px;
     .box-shadow(0 2px 4px rgba(0,0,0,0.2));
   }
 
@@ -272,6 +276,36 @@ html, body {
 
       a {
         text-decoration: none;
+
+        .tip-in {
+          position: absolute;
+          right: 0;
+          top: 38px;
+          white-space: nowrap;
+          padding: 3px 8px;
+          font-size: 12px;
+
+          &:after {
+            content: '';
+            position: absolute;
+            border-left: 7px solid transparent;
+            border-right: 7px solid transparent;
+            border-bottom: 7px solid @alert-danger-bg;
+            top: -7px;
+            right: 25px;
+          }
+
+          &:before {
+            content: '';
+            position: absolute;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-bottom: 8px solid @alert-danger-border;
+            top: -8px;
+            right: 24px;
+          }
+
+        }
       }
     }
   }

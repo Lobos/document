@@ -41,7 +41,7 @@
         };
     };
 
-    app.serviceFactory.$loading = function ($timeout) {
+    app.serviceFactory.$loading = function () {
         var loading = 0;
         return {
             get: function () {

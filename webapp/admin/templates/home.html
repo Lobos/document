@@ -18,7 +18,7 @@
         <a class="menu-hidden-desktop" href="javascript:"><i class="icon-reorder"></i> 菜单</a>
     </div>
 
-    <div class="message-top" ng-controller="MessageCtrl">
+    <div ng-show="informs.length>0&&loading()<=0" class="message-top" ng-controller="MessageCtrl">
         <div ng-repeat="inform in informs" class="alert {{inform.alertClass}} {{inform.dismiss!=0?'alert-dismissable':''}} fade in informer">
             <button ng-show="inform.dismiss!=0" type="button" ng-click="close($index)" class="close">×</button>
             {{inform.message}}
