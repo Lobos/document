@@ -12,8 +12,15 @@
             $loading.end();
         };
 
+        var getPath = function (url) {
+            url = url.split('?');
+            return url[0];
+        };
         $scope.$watch(function () { return $location.url(); }, function (path) {
             if (path == '/') return;
+            var p = getPath(path);
+            if ($scope._lastPath == p) return;
+            $scope._lastPath = p;
             path = path.replace(/\./g, '/');
             $scope.currentPage = path;
             $loading.start();
@@ -39,12 +46,22 @@
 
     app.controller.TableCtrl = function ($scope, $http, $attrs, $location, $modal, $message, $loading, $timeout) {
         $scope.url = $attrs.url;
-        $scope.page = $attrs.page || $location.search()['p'] || 1;
+        $scope.page = $attrs.page || 1;
         $scope.size = $attrs.size || 30;
         $scope.data = [];
         $scope.total = 1;
         $scope.pageSize = 5;
         $scope.allSelected = false;
+        $scope.filters = {};
+
+        //init
+        angular.forEach($location.search(), function (value, key) {
+            if (key == 'page') $scope.page = value;
+            else if (key == 'size') $scope.size = value;
+            else if (key.indexOf('filters.') == 0) {
+                $scope.filters[key.replace('filters.', '')] = value;
+            }
+        });
 
         //selection
         $scope.getSelection = function () {
@@ -66,7 +83,7 @@
         $scope.selectPage = function (page) {
             $scope.page = page;
             $scope.update();
-            $location.search('p', page)
+            //$location.search('p', page)
         };
 
         //update
@@ -75,7 +92,8 @@
             $scope.allSelected = false;
             var data = {
                 page: $scope.page,
-                size: $scope.size
+                size: $scope.size,
+                filters: $scope.filters
             };
             $http.post($scope.url, data).success(function (json) {
                 $loading.end();
@@ -88,6 +106,14 @@
                     });
                 }
             });
+            var ss = {
+                page: data.page,
+                size: data.size
+            };
+            angular.forEach(data.filters, function (value, key) {
+                ss['filters.' + key] = value;
+            });
+            $location.search(ss);
         };
 
         $scope.remove = function (url) {
@@ -115,7 +141,7 @@
                 backdrop: true,
                 windowClass: 'modal',
                 controller: function ($scope, $modalInstance) {
-                    $scope.content = '确定要删除这 ' + length + ' 个吗？';
+                    $scope.content = '确定要删除这 ' + length + ' 个项目吗？';
                     $scope.submit = function () {
                         rm();
                         $modalInstance.dismiss('cancel');

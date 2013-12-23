@@ -13,12 +13,18 @@
         </div>
     </div>
     <div class="page-content scrollable">
+        <form class="form-inline" ng-submit="page=1;update();">
+            <label class="form-group"><input class="form-control" placeholder="昵称" ng-model="filters.name" /></label>
+            <label class="form-group"><input class="form-control" placeholder="Email" ng-model="filters.email" /></label>
+            <label class="form-group"><button class="btn btn-success">确定</button></label>
+            <label class="form-group"><button ng-click="filters={}" class="btn btn-default">重置</button></label>
+        </form>
         <table class="table table-listed table-hover">
             <thead>
                 <tr>
                     <th style="width: 20px;"><input ng-model="allSelected" ng-click="selectAll($event)" type="checkbox" /></th>
                     <th style="width: 20px;"></th>
-                    <th>登录名</th>
+                    <th>昵称</th>
                     <th>邮箱</th>
                     <th>角色</th>
                     <th>状态</th>

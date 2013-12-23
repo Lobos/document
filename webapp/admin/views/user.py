@@ -15,13 +15,13 @@ def list():
     if request.method == 'GET':
         return render_template('user/list.html')
 
-    filters = html.get_filters('name')
+    filters = html.get_filters(request.json['filters'], 'name', 'email')
 
-    if request.form.get('status'):
-        filters.update({ 'status': request.form.get('status') == '1' })
+    if request.json['filters'].get('status'):
+        filters.update({'status': request.form.get('status') == '1'})
 
-    if request.form.get('role'):
-        filters.update({ 'role.$ref':'role', 'role.$id':ObjectId(request.form.get('role')) })
+    if request.json['filters'].get('role'):
+        filters.update({'role.$ref':'role', 'role.$id':ObjectId(request.form.get('role'))})
 
     models = db.User.find(filters)
 

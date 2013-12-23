@@ -125,12 +125,12 @@ def get_page_size(total=1, size=20):
     return page, size, skip
 
 
-def get_filters(*args):
+def get_filters(obj, *args):
     '''获取查询筛选条件'''
     filters = {}
     for k in args:
-        if request.form.get(k):
-            filters.update({ k: {'$regex' : request.form.get(k)} })
+        if obj.get(k):
+            filters.update({k: {'$regex': obj.get(k)}})
     return filters
 
 
