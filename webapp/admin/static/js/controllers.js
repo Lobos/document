@@ -107,8 +107,7 @@
                 }
             });
             var ss = {
-                page: data.page,
-                size: data.size
+                page: data.page
             };
             angular.forEach(data.filters, function (value, key) {
                 ss['filters.' + key] = value;
