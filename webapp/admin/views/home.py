@@ -2,7 +2,7 @@
 
 import datetime
 from flask import Blueprint, render_template, request, session, make_response, jsonify
-from .. import db
+from .. import app, db
 from ..helpers import user
 from . import render_json
 from .menu import MENU
@@ -16,9 +16,6 @@ bp = Blueprint("home", __name__)
 def index(module=None, ctrl=None):
     return render_template("home.html", admin=user.get_user(), menu=MENU)
 
-@bp.route('/test')
-def test():
-    return render_template("test.html")
 
 # == signin ========================================
 @bp.route('/signin', methods=['GET', 'POST'])
@@ -51,3 +48,7 @@ def signout():
     resp = make_response(render_template('signin.html'))
     resp.set_cookie(user.COOKIE_USER, '', expires=expires)
     return resp
+
+
+def register():
+    app.register_blueprint(bp)

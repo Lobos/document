@@ -1,6 +1,21 @@
 (function () {
     'use strict';
 
+    angular.queryString = function(url, data){
+        var qs = function (obj, prefix) {
+            var str = [];
+            for (var p in obj) {
+                var k = prefix ? prefix + "." + p : p,
+                    v = obj[p];
+                str.push(angular.isObject(v) ? qs(v, k) : (k) + "=" + encodeURIComponent(v));
+            }
+            return str.join("&");
+        };
+        var s = qs(data);
+        if (s) url = url + "?" + s;
+        return url;
+    };
+
     /*
     即使用不到$location，也要在参数中传入，否则 href 不会 rewrite
      */
@@ -95,7 +110,7 @@
                 size: $scope.size,
                 filters: $scope.filters
             };
-            $http.post($scope.url, data).success(function (json) {
+            $http.get(angular.queryString($scope.url, data)).success(function (json) {
                 $loading.end();
                 if (json.status == 1) {
                     $scope.page = json.page;
@@ -155,12 +170,13 @@
     };
 
     app.controller.EditCtrl = function ($scope, $window, $attrs, $http, $location, $message, $loading) {
-        $scope.$location = $location;
+        $scope.url = $attrs.url;
+        $scope.hash = $location.hash();
         $scope.model = {};
 
-        $scope.getEntry = function (url) {
+        $scope.getEntry = function () {
             if (!$location.hash()) return;
-            $http.post(url).success(function (json) {
+            $http.get($scope.url + $location.hash()).success(function (json) {
                 if (json.status) $scope.model = json.model;
             });
         };
@@ -169,11 +185,12 @@
             $window.history.back();
         };
 
-        $scope.submit = function (url) {
+        $scope.submit = function () {
             if (!$scope.form.$valid) return;
             $loading.start();
 
-            $http.post(url, $scope.model).success(function (json) {
+            var hp = $scope.hash ? $http.put($scope.url+$scope.hash, $scope.model) : http.post($scope.url, $scope.model);
+            hp.success(function (json) {
                 $loading.end();
                 if (json.status == 1) {
                     $message.inform(json.msg);

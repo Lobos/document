@@ -1,6 +1,6 @@
 {% from "_context.html" import formgroup, input %}
 {% set _form = "form" %}
-<div ng-controller="EditCtrl" ng-init="getEntry('{{ url_for(".edit") }}' + $location.hash())">
+<div ng-controller="EditCtrl" url="{{ url_for("user_api") }}" ng-init="getEntry()">
     <div class="page-header">
         <h3>用户管理 <small><i class="icon icon-angle-double-right"></i> 用户编辑</small></h3>
 
@@ -10,7 +10,7 @@
         </div>
     </div>
     <div class="page-content scrollable">
-        <form class="form-horizontal" ng-submit="submit('{{ url_for('.save') }}')" novalidate name="{{ _form }}" role="form">
+        <form class="form-horizontal" ng-submit="submit()" novalidate name="{{ _form }}" role="form">
             {% call formgroup('Email', size=[2,5]) %}
                 {{ input("email", type="email", model="model.email", form=_form, required=True) }}
             {% endcall %}

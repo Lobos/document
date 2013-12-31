@@ -103,12 +103,12 @@ def _fmt(model, key):
 def get_page_size(total=1, size=20):
     '''获取分页页码和条目数'''
     try:
-        page = int(request.json.get('page'))
+        page = int(request.args.get('page'))
     except Exception:
         page = 1
 
     try:
-        _size = int(request.json.get('size'))
+        _size = int(request.args.get('size'))
         if _size > 0:
             size = _size
     except Exception:
@@ -125,19 +125,21 @@ def get_page_size(total=1, size=20):
     return page, size, skip
 
 
-def get_filters(obj, *args):
+def get_filters(args=[], pre='filters.'):
     '''获取查询筛选条件'''
+    qs = request.args
     filters = {}
     for k in args:
-        if obj.get(k):
-            filters.update({k: {'$regex': obj.get(k)}})
+        v = qs.get(pre + k)
+        if v:
+            filters.update({k: {'$regex': v}})
     return filters
 
 
 def get_sort(default_key="_id", default_sort=pymongo.ASCENDING, allow_key=None):
     '''生成排序条件'''
-    sort_key = request.form.get('sort[key]')
-    sort_order = pymongo.DESCENDING if request.form.get('sort[asc]') == "-1" else pymongo.ASCENDING
+    sort_key = request.args.get('sort[key]')
+    sort_order = pymongo.DESCENDING if request.args.get('sort[asc]') == "-1" else pymongo.ASCENDING
     if allow_key and sort_key in allow_key:
         return sort_key, sort_order
     elif allow_key is None and sort_key:
