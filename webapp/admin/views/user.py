@@ -24,14 +24,6 @@ def user_edit():
     return render_template('user/edit.html', roles=roles)
 
 
-@bp.route('/user/remove', methods=['POST'])
-@ck_auth('user.remove', 'json')
-@html.remove()
-def remove(ids):
-    db.user.remove({'_id': {'$in':ids}})
-    return render_json(u' 成功删除.', 1)
-
-
 def user_save(model, f):
     model['status'] = f.get('status', False)
 
@@ -96,12 +88,11 @@ class UserAPI(MethodView):
         model = db.User()
         return user_save(model, f)
 
-
     def delete(self, _id):
-        # delete a single user
+        #管理员不能删除
         pass
 
 
 def register():
     app.register_blueprint(bp)
-    register_api(UserAPI, 'user_api', '/user/')
+    register_api(UserAPI, 'user_api', '/user/api/')

@@ -1,12 +1,12 @@
 {% from "_context.html" import pagination %}
-<div ng-controller="TableCtrl" url="{{ url_for("user_api") }}" ng-init="update();">
+<div ng-controller="TableCtrl" size="3" url="{{ url_for("user_api") }}" ng-init="update(true);">
     <div class="page-header">
         <h3>用户管理 <small><i class="icon icon-angle-double-right"></i> 用户列表</small></h3>
 
         <div class="buttons btn-group">
-            <a class="btn btn-default" ng-click="update()"><i class="icon icon-refresh"></i> 刷新</a>
+            <a class="btn btn-default" ng-click="update()"><i class="icon icon-refresh"></i> 更新</a>
             <a class="btn btn-success" href="user.edit"><i class="icon icon-plus"></i> 新建</a>
-            <a class="btn btn-danger" ng-click="remove('{{ url_for("user.remove") }}')">
+            <a class="btn btn-danger" ng-click="multiRemove('')">
                 <i class="icon icon-trash-o"></i> 删除
                 <div ng-show="noSelected" class="tip-in alert alert-danger">至少选择一个项目</div>
             </a>
@@ -19,27 +19,30 @@
             <label class="form-group"><button class="btn btn-success">确定</button></label>
             <label class="form-group"><button ng-click="filters={}" class="btn btn-default">重置</button></label>
         </form>
-        <table class="table table-listed table-hover">
+        <table class="table table-listed">
             <thead>
                 <tr>
-                    <th style="width: 20px;"><input ng-model="allSelected" ng-click="selectAll($event)" type="checkbox" /></th>
-                    <th style="width: 20px;"></th>
+                    <th style="width: 30px;"><i ng-class="{'icon':true, 'icon-square-o':!allSelected, 'icon-check-square-o':allSelected}" ng-click="selectAll()"></i></th>
+                    <th style="width: 50px;"></th>
                     <th>昵称</th>
                     <th>邮箱</th>
                     <th>角色</th>
-                    <th>状态</th>
+                    <th style="text-align: center;">状态</th>
                     <th>最后登录IP</th>
                     <th style="width: 180px;">最后登录时间</th>
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="item in data">
-                    <td><input ng-model="item._isChecked" type="checkbox" /></td>
-                    <td><a href="user.edit#{{item._id}}"><i class="icon icon-edit"></i></a></td>
+                <tr ng-click="item.$isChecked=!item.$isChecked" ng-class="{'active':item.$isChecked}" ng-repeat="item in data">
+                    <td><i ng-class="{'icon':true, 'icon-square-o':!item.$isChecked, 'icon-check-square-o':item.$isChecked}"></i></td>
+                    <td>
+                        <a ng-href="user.edit#{{item._id}}"><i class="icon icon-edit"></i></a>
+                        <a href="javascript:;" ng-click="remove(item._id)"><i class="icon icon-trash-o text-danger"></i></a>
+                    </td>
                     <td>{{item.name}}</td>
                     <td>{{item.email}}</td>
                     <td>{{item.role_name}}</td>
-                    <td>{{item.status}}</td>
+                    <td style="text-align: center;" ng-bind-html="item.status|status"></td>
                     <td>{{item.signin_ip}}</td>
                     <td>{{item.signin_time}}</td>
                 </tr>

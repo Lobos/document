@@ -27,19 +27,22 @@
             $loading.end();
         };
 
-        var getPath = function (url) {
-            url = url.split('?');
-            return url[0];
+        var refract = function (url) {
+            var index = url.indexOf('?');
+            if (index <= 0)
+                return url.replace(/\./g, '/');
+
+            var path = url.substring(0, index);
+
+            return path.replace(/\./g, '/') + url.slice(index);
         };
+
         $scope.$watch(function () { return $location.url(); }, function (path) {
             if (path == '/') return;
-            var p = getPath(path);
-            if ($scope._lastPath == p) return;
-            $scope._lastPath = p;
-            path = path.replace(/\./g, '/');
-            $scope.currentPage = path;
+            $scope.currentPage = refract(path);
             $loading.start();
         });
+
     };
 
     app.controller.MessageCtrl = function ($scope, $message) {
@@ -61,7 +64,7 @@
 
     app.controller.TableCtrl = function ($scope, $http, $attrs, $location, $modal, $message, $loading, $timeout) {
         $scope.url = $attrs.url;
-        $scope.page = $attrs.page || 1;
+        $scope.page = $location.search().page || $attrs.page || 1;
         $scope.size = $attrs.size || 30;
         $scope.data = [];
         $scope.total = 1;
@@ -82,27 +85,26 @@
         $scope.getSelection = function () {
             var selection = [];
             angular.forEach($scope.data, function (item) {
-                if (item._isChecked)
+                if (item.$isChecked)
                     selection.push(item._id);
             });
             return selection;
         };
 
-        $scope.selectAll = function (e) {
-            var s = e.target.checked;
+        $scope.selectAll = function () {
+            var s = $scope.allSelected = !$scope.allSelected;
             angular.forEach($scope.data, function (item) {
-                item._isChecked = s;
+                item.$isChecked = s;
             });
         };
 
         $scope.selectPage = function (page) {
             $scope.page = page;
             $scope.update();
-            //$location.search('p', page)
         };
 
         //update
-        $scope.update = function () {
+        $scope.update = function (init) {
             $loading.start();
             $scope.allSelected = false;
             var data = {
@@ -117,7 +119,7 @@
                     $scope.total = json.total;
                     $scope.data = json.data;
                     angular.forEach($scope.data, function (item) {
-                        item._isChecked = false;
+                        item.$isChecked = false;
                     });
                 }
             });
@@ -130,7 +132,31 @@
             $location.search(ss);
         };
 
-        $scope.remove = function (url) {
+        // remove
+        var modal = function (txt, fn) {
+            var _scope = $scope;
+            $modal.open({
+                templateUrl: "/static/templates/confirm.html",
+                backdrop: true,
+                windowClass: 'modal',
+                controller: function ($scope, $modalInstance) {
+                    $scope.content = txt;
+                    $scope.submit = function () {
+                        fn.success(function (json) {
+                            $loading.end();
+                            _scope.update();
+                            $message.inform(json.msg);
+                        });
+                        $modalInstance.dismiss('cancel');
+                    };
+                    $scope.cancel = function () {
+                        $modalInstance.dismiss('cancel');
+                    };
+                }
+            });
+        };
+
+        $scope.multiRemove = function (url) {
             var selects = $scope.getSelection();
             var length = selects.length;
 
@@ -141,32 +167,12 @@
             }
             $scope.noSelected = false;
 
-            var rm = function () {
-                $loading.start();
-                $http.post(url, {ids: selects}).success(function (json) {
-                    $loading.end();
-                    $scope.update();
-                    $message.inform(json.msg);
-                });
-            };
-
-            $modal.open({
-                templateUrl: "/static/templates/confirm.html",
-                backdrop: true,
-                windowClass: 'modal',
-                controller: function ($scope, $modalInstance) {
-                    $scope.content = '确定要删除这 ' + length + ' 个项目吗？';
-                    $scope.submit = function () {
-                        rm();
-                        $modalInstance.dismiss('cancel');
-                    };
-                    $scope.cancel = function () {
-                        $modalInstance.dismiss('cancel');
-                    };
-                }
-            });
+            modal('确定要删除这 ' + length + ' 个项目吗？', $http.post(url, {ids: selects}));
         };
 
+        $scope.remove = function (id) {
+            modal('确定要删除吗？', $http.delete($scope.url + id));
+        };
     };
 
     app.controller.EditCtrl = function ($scope, $window, $attrs, $http, $location, $message, $loading) {
@@ -189,7 +195,7 @@
             if (!$scope.form.$valid) return;
             $loading.start();
 
-            var hp = $scope.hash ? $http.put($scope.url+$scope.hash, $scope.model) : http.post($scope.url, $scope.model);
+            var hp = $scope.hash ? $http.put($scope.url+$scope.hash, $scope.model) : $http.post($scope.url, $scope.model);
             hp.success(function (json) {
                 $loading.end();
                 if (json.status == 1) {
