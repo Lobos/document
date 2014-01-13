@@ -37,11 +37,13 @@
             return path.replace(/\./g, '/') + url.slice(index);
         };
 
+        /*
         $scope.$watch(function () { return $location.url(); }, function (path) {
             if (path == '/') return;
             $scope.currentPage = refract(path);
             $loading.start();
         });
+        */
 
     };
 
