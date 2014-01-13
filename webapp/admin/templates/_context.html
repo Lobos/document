@@ -1,6 +1,6 @@
 {% macro pagination() -%}
 <div class="pagination-wrapper">
-    <pagination total-items="total" page="page" items-per-page="size" max-size="pageSize" on-select-page="selectPage(page)" class="pagination-small" boundary-links="true" rotate="false"></pagination>
+    <pagination total-items="total" page="page" items-per-page="size" max-size="pageSize" class="pagination-small" boundary-links="true" rotate="false"></pagination>
     <span>共 {{total}} 条，当前 {{(page-1)*size+1}}-{{(page*size)>total?total:(page*size)}}</span>
 </div>
 {%- endmacro %}

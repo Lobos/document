@@ -62,20 +62,20 @@
         };
     };
 
-    app.controller.TableCtrl = function ($scope, $http, $attrs, $location, $modal, $message, $loading, $timeout) {
+    app.controller.ListTableCtrl = function ($scope, $http, $attrs, $location, $modal, $message, $loading, $timeout) {
         $scope.url = $attrs.url;
         $scope.page = $location.search().page || $attrs.page || 1;
         $scope.size = $attrs.size || 30;
         $scope.data = [];
-        $scope.total = 1;
+        $scope.total = 100;
         $scope.pageSize = 5;
         $scope.allSelected = false;
         $scope.filters = {};
 
         //init
         angular.forEach($location.search(), function (value, key) {
-            if (key == 'page') $scope.page = value;
-            else if (key == 'size') $scope.size = value;
+            //if (key == 'page') $scope.page = value;
+            if (key == 'size') $scope.size = value;
             else if (key.indexOf('filters.') == 0) {
                 $scope.filters[key.replace('filters.', '')] = value;
             }
@@ -98,13 +98,21 @@
             });
         };
 
-        $scope.selectPage = function (page) {
-            $scope.page = page;
-            $scope.update();
+        $scope.setLocation = function () {
+            var ss = {
+                page: $scope.page
+            };
+            angular.forEach($scope.filters, function (value, key) {
+                ss['filters.' + key] = value;
+            });
+            console.log(angular.toJson(ss));
+            $location.search(ss);
         };
 
+        $scope.$watch('page', $scope.setLocation);
+
         //update
-        $scope.update = function (init) {
+        $scope.update = function () {
             $loading.start();
             $scope.allSelected = false;
             var data = {
@@ -115,7 +123,7 @@
             $http.get(angular.queryString($scope.url, data)).success(function (json) {
                 $loading.end();
                 if (json.status == 1) {
-                    $scope.page = json.page;
+                    //$scope.page = json.page;
                     $scope.total = json.total;
                     $scope.data = json.data;
                     angular.forEach($scope.data, function (item) {
@@ -123,13 +131,6 @@
                     });
                 }
             });
-            var ss = {
-                page: data.page
-            };
-            angular.forEach(data.filters, function (value, key) {
-                ss['filters.' + key] = value;
-            });
-            $location.search(ss);
         };
 
         // remove
@@ -146,6 +147,8 @@
                             $loading.end();
                             _scope.update();
                             $message.inform(json.msg);
+                        }).error(function () {
+                            $message.inform('error');
                         });
                         $modalInstance.dismiss('cancel');
                     };

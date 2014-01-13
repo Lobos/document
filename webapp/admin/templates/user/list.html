@@ -1,5 +1,5 @@
 {% from "_context.html" import pagination %}
-<div ng-controller="TableCtrl" size="3" url="{{ url_for("user_api") }}" ng-init="update(true);">
+<div ng-controller="ListTableCtrl" size="3" url="{{ url_for("user_api") }}" ng-init="update()">
     <div class="page-header">
         <h3>用户管理 <small><i class="icon icon-angle-double-right"></i> 用户列表</small></h3>
 
@@ -13,7 +13,7 @@
         </div>
     </div>
     <div class="page-content scrollable">
-        <form class="form-inline" ng-submit="page=1;update();">
+        <form class="form-inline" ng-submit="page=1;setLocation();">
             <label class="form-group"><input class="form-control" placeholder="昵称" ng-model="filters.name" /></label>
             <label class="form-group"><input class="form-control" placeholder="Email" ng-model="filters.email" /></label>
             <label class="form-group"><button class="btn btn-success">确定</button></label>
