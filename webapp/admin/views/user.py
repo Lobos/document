@@ -5,7 +5,7 @@ from flask.views import MethodView
 from bson import ObjectId
 from ..helpers.user import ck_auth
 from ..helpers import html, cn_time_now
-from .. import app, db
+from .. import app, db, cache
 from . import render_json, register_api
 
 bp = Blueprint('user', __name__)
@@ -13,12 +13,14 @@ bp = Blueprint('user', __name__)
 
 @bp.route('/user/list')
 @ck_auth('user.edit', 'html')
+@cache.cached()
 def user_list():
     return render_template('user/list.html')
 
 
 @bp.route('/user/edit')
 @ck_auth('user.edit', 'html')
+@cache.cached()
 def user_edit():
     roles = db.Role.find()
     return render_template('user/edit.html', roles=roles)
