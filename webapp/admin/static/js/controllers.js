@@ -26,25 +26,6 @@
         $scope.afterPageLoad = function () {
             $loading.end();
         };
-
-        var refract = function (url) {
-            var index = url.indexOf('?');
-            if (index <= 0)
-                return url.replace(/\./g, '/');
-
-            var path = url.substring(0, index);
-
-            return path.replace(/\./g, '/') + url.slice(index);
-        };
-
-        /*
-        $scope.$watch(function () { return $location.url(); }, function (path) {
-            if (path == '/') return;
-            $scope.currentPage = refract(path);
-            $loading.start();
-        });
-        */
-
     };
 
     app.controller.MessageCtrl = function ($scope, $message) {
@@ -107,7 +88,6 @@
             angular.forEach($scope.filters, function (value, key) {
                 ss['filters.' + key] = value;
             });
-            console.log(angular.toJson(ss));
             $location.search(ss);
         };
 
@@ -125,7 +105,6 @@
             $http.get(angular.queryString($scope.url, data)).success(function (json) {
                 $loading.end();
                 if (json.status == 1) {
-                    //$scope.page = json.page;
                     $scope.total = json.total;
                     $scope.data = json.data;
                     angular.forEach($scope.data, function (item) {
@@ -150,7 +129,7 @@
                             _scope.update();
                             $message.inform(json.msg);
                         }).error(function () {
-                            $message.inform('error');
+                            $message.inform('server error');
                         });
                         $modalInstance.dismiss('cancel');
                     };

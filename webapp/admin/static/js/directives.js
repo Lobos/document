@@ -14,44 +14,52 @@
         };
     }];
 
-    app.directive.pageInclude = ['$http', '$location', '$templateCache', '$compile',
-                       function ($http, $location, $templateCache, $compile) {
+    app.directive.pageInclude = ['$http', '$location', '$templateCache', '$compile', '$loading', '$message',
+                       function ($http,   $location,   $templateCache,   $compile,   $loading,   $message) {
         return {
             restrict: 'ECA',
             priority: 400,
-            //transclude: 'element',
-            //controller: angular.noop,
-            compile: function (element) {
+            link: function ($scope, $element, $attr, ctrl) {
                 var refract = function (src) {
                     var index = src.indexOf('?');
                     if (index <= 0)
                         index = src.indexOf('#');
-                    if (index <= 0)
-                        return src.replace(/\./g, '/');
-
-                    var path = src.substring(0, index);
-
-                    //return path.replace(/\./g, '/') + src.slice(index);
-                    return path.replace(/\./g, '/');
+                    if (index > 0)
+                        src = src.substring(0, index);
+                    return src.replace(/\./g, '/');
                 };
 
-                return function ($scope, $element, $attr, ctrl) {
-                    var currentScope = null;
-                    $scope.$watch(function () { return $location.url(); }, function (src) {
-                        if (src == '/') return;
-                        src = refract(src);
-                        $http.get(src, {cache: $templateCache}).success(function (response) {
-                            var newScope = $scope.$new();
+                var changeCounter = 0,
+                    currentScope = null;
+                var clearUp = function () {
+                    if (currentScope) {
+                        currentScope.$destroy();
+                        currentScope = null;
+                    }
+                };
 
-                            $element.html(response);
-                            $compile($element.contents())(newScope);
+                $scope.$watch(function () { return $location.url(); }, function (src) {
+                    if (src == '/') return;
+                    src = refract(src);
+                    $loading.start();
 
-                            if (currentScope)
-                                currentScope.$destroy();
-                            currentScope = newScope;
-                        });
+                    var thisChangeId = ++changeCounter;
+                    $http.get(src, {cache: $templateCache}).success(function (response) {
+                        $loading.end();
+                        if (thisChangeId !== changeCounter) return;
+                        var newScope = $scope.$new();
+
+                        $element.html(response);
+                        $compile($element.contents())(newScope);
+
+                        clearUp();
+                        currentScope = newScope;
+                    }).error(function () {
+                        $loading.end();
+                        clearUp();
+                        $message.inform('页面获取失败');
                     });
-                };
+                });
             }
         };
     }];
