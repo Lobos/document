@@ -7,18 +7,18 @@
     {% endcall %}
     <div class="page-content scrollable">
         <form class="form-horizontal" ng-submit="submit()" novalidate name="{{ _form }}" role="form">
-            {% call _cxt.formgroup('角色名称', size=[2,5]) %}
+            {% call _cxt.form_group('角色名称', size=[2,5]) %}
                 {{ _cxt.input("name", model="model.name", form=_form, required=True, minlength=1, maxlength=20) }}
             {% endcall %}
 
-            {% call _cxt.formgroup('权限') %}
+            {% call _cxt.form_group('权限') %}
             {% endcall %}
 
-            {% call _cxt.formgroup('备注') %}
+            {% call _cxt.form_group('备注') %}
                 <textarea class="form-control" rows="5" name="desc" ng-model="model.desc"></textarea>
             {% endcall %}
 
-            {% call _cxt.formgroup() %}
+            {% call _cxt.form_group() %}
                 <div class="checkbox">
                     <label>
                         <input type="checkbox" ng-model="model.is_admin" /> 管理后台
@@ -26,9 +26,7 @@
                 </div>
             {% endcall %}
 
-            {% call _cxt.formgroup() %}
-                <button ng-disabled="{{ _form }}.$invalid || sending" class="btn btn-success"><i class="icon icon-save"></i> 保存</button>
-            {% endcall %}
+            {{ _cxt.form_save(_form) }}
         </form>
     </div>
 </div>

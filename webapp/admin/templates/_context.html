@@ -22,7 +22,7 @@
     <a ng-click="back()" class="btn btn-default"><i class="icon icon-reply"></i> 取消</a>
 {%- endmacro %}
 {% macro header_save(form) -%}
-<a ng-disabled="{{ form }}.$invalid || sending" class="btn btn-success"><i class="icon icon-save"></i> 保存</a>
+<a ng-disabled="{{ form }}.$invalid || sending" ng-click="submit()" class="btn btn-success"><i class="icon icon-save"></i> 保存</a>
 {% endmacro %}
 
 
@@ -35,7 +35,7 @@
 {%- endmacro %}
 
 
-{% macro formgroup(label=None, size=[2,10]) -%}
+{% macro form_group(label=None, size=[2,10]) -%}
     <div class="form-group">
         {% if label -%}
             <label class="col-sm-{{ size[0] }} control-label">{{ label }}</label>
@@ -44,6 +44,11 @@
             <div class="col-sm-offset-{{ size[0] }} col-sm-{{ size[1] }}">{{ caller() }}</div>
         {%- endif %}
     </div>
+{%- endmacro %}
+{% macro form_save(form) -%}
+    {% call form_group() %}
+    <button ng-disabled="{{ form }}.$invalid || sending" class="btn btn-success"><i class="icon icon-save"></i> 保存</button>
+    {% endcall %}
 {%- endmacro %}
 
 
