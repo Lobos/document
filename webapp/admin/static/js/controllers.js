@@ -35,8 +35,9 @@
         };
     };
 
-    app.controller.NavCtrl = function ($scope) {
+    app.controller.NavCtrl = function ($scope, $location) {
         $scope.node = {};
+        $scope.highlight = $location.path().slice(1);
         $scope.active = function (url, isNode) {
             if (isNode)
                 $scope.node[url] = !$scope.node[url];
@@ -176,7 +177,7 @@
         };
 
         $scope.submit = function () {
-            if (!$scope.form.$valid) return;
+            if (!$scope.mainform.$valid) return;
             $loading.start();
 
             var hp = $scope.hash ? $http.put($scope.url+$scope.hash, $scope.model) : $http.post($scope.url, $scope.model);

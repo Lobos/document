@@ -25,7 +25,7 @@ MENU = [
             {
                 'title': u'角色管理',
                 'icon': 'icon-group',
-                'url': 'role.index',
+                'url': 'role.list',
                 'children': [
                     { 'title': u'添加/修改', 'url': 'role.edit' },
                     { 'title': u'删除', 'url': 'role.remove' }

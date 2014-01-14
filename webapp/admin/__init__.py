@@ -11,7 +11,7 @@ app.config.from_object(DefaultConfig)
 db = MongoKit(app)
 cache = Cache(app)
 
-register_views(app)
+register_views()
 register_db(db)
 register_filters(app)
 configure_errorhandlers(app)

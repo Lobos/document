@@ -7,13 +7,15 @@ def register_db(db):
     db.register([Icon, Role, User])
 
 
-def register_views(app):
-    from views import home, user
-    home.register()
-    user.register()
+def register_views():
+    from views import \
+               home, user, role
+    for m in [home, user, role]:
+        m.register()
 
 
 def register_filters(app):
+    # 解决angularjs冲突
     app.jinja_env.variable_start_string = '{{ '
     app.jinja_env.variable_end_string = ' }}'
 

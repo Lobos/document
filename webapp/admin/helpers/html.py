@@ -95,7 +95,7 @@ def _fmt(model, key):
     elif t is _DATETIME:
         s = format_datetime(s)
     elif t is _NONE:
-        s = 'None'
+        s = ''
 
     return s
 

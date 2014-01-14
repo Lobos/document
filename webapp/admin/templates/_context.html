@@ -1,8 +1,37 @@
-{% macro pagination() -%}
-<div class="pagination-wrapper">
-    <pagination total-items="total" page="page" items-per-page="size" max-size="pageSize" class="pagination-small" boundary-links="true" rotate="false"></pagination>
-    <span>共 {{total}} 条，当前 {{(page-1)*size+1}}-{{(page*size)>total?total:(page*size)}}</span>
-</div>
+{% macro header(h1, h2="") -%}
+    <div class="page-header">
+        <h3>{{ h1 }} <small><i class="icon icon-angle-double-right"></i> {{ h2 }}</small></h3>
+        <div class="buttons btn-group">
+            {{ caller() }}
+        </div>
+    </div>
+{%- endmacro %}
+{% macro header_refresh() -%}
+    <a class="btn btn-default" ng-click="update()"><i class="icon icon-refresh"></i> 更新</a>
+{%- endmacro %}
+{% macro header_new(src) -%}
+    <a class="btn btn-success" href="{{ src }}"><i class="icon icon-plus"></i> 新建</a>
+{%- endmacro %}
+{% macro header_remove(src) -%}
+    <a class="btn btn-danger" ng-click="multiRemove('{{ src }}')">
+        <i class="icon icon-trash-o"></i> 删除
+        <div ng-show="noSelected" class="tip-in alert alert-danger">至少选择一个项目</div>
+    </a>
+{%- endmacro %}
+{% macro header_cancel() -%}
+    <a ng-click="back()" class="btn btn-default"><i class="icon icon-reply"></i> 取消</a>
+{%- endmacro %}
+{% macro header_save(form) -%}
+<a ng-disabled="{{ form }}.$invalid || sending" class="btn btn-success"><i class="icon icon-save"></i> 保存</a>
+{% endmacro %}
+
+
+{% macro filter() -%}
+    <form class="form-inline" ng-submit="page=1;setLocation();">
+        {{ caller() }}
+        <label class="form-group"><button class="btn btn-primary">确定</button></label>
+        <label class="form-group"><button ng-click="filters={}" class="btn btn-default">重置</button></label>
+    </form>
 {%- endmacro %}
 
 
@@ -35,3 +64,13 @@
         <span class="help-block" ng-show="{{ form }}.{{ name }}.$error.maxlength">长度不能大于{{ maxlength }}个字符！</span>
     {%- endif -%}
 {%- endmacro -%}
+
+
+{% macro pagination() -%}
+    <div class="pagination-wrapper">
+        <pagination total-items="total" page="page" items-per-page="size" max-size="pageSize" class="pagination-small" boundary-links="true" rotate="false"></pagination>
+        <span>共 {{total}} 条，当前 {{(page-1)*size+1}}-{{(page*size)>total?total:(page*size)}}</span>
+    </div>
+{%- endmacro %}
+
+

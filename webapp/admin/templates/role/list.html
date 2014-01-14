@@ -1,0 +1,39 @@
+{% import "_context.html" as _cxt %}
+<div ng-controller="ListTableCtrl" url="{{ url_for("role_api") }}" ng-init="update()">
+    {% call _cxt.header('角色管理', '角色列表') %}
+        {{ _cxt.header_refresh() }}
+        {{ _cxt.header_new('role.edit') }}
+    {% endcall %}
+
+    <div class="page-content scrollable">
+        {% call _cxt.filter() %}
+            <label class="form-group"><input class="form-control" placeholder="名称" ng-model="filters.name" /></label>
+        {% endcall %}
+        <table class="table table-listed">
+            <thead>
+                <tr>
+                    <th style="width: 30px;"><i ng-class="{'icon':true, 'icon-square-o':!allSelected, 'icon-check-square-o':allSelected}" ng-click="selectAll()"></i></th>
+                    <th style="width: 50px;"></th>
+                    <th>角色名称</th>
+                    <th class="text-center">后台管理</th>
+                    <th>说明</th>
+                    <th style="width: 180px;">最后修改时间</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-click="item.$isChecked=!item.$isChecked" ng-class="{'active':item.$isChecked}" ng-repeat="item in data">
+                    <td><i ng-class="{'icon':true, 'icon-square-o':!item.$isChecked, 'icon-check-square-o':item.$isChecked}"></i></td>
+                    <td>
+                        <a ng-href="role.edit#{{item._id}}"><i class="icon icon-edit"></i></a>
+                        <a href="javascript:;" ng-click="remove(item._id)"><i class="icon icon-trash-o text-danger"></i></a>
+                    </td>
+                    <td>{{item.name}}</td>
+                    <td class="text-center" ng-bind-html="item.is_admin|status"></td>
+                    <td>{{item.desc}}</td>
+                    <td>{{item.edit_time}}</td>
+                </tr>
+            </tbody>
+        </table>
+        {{ _cxt.pagination() }}
+    </div>
+</div>
