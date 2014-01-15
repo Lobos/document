@@ -138,11 +138,11 @@ def get_filters(args=[], pre='filters.'):
 
 def get_sort(default_key="_id", default_sort=pymongo.ASCENDING, allow_key=None):
     '''生成排序条件'''
-    sort_key = request.args.get('sort[key]')
-    sort_order = pymongo.DESCENDING if request.args.get('sort[asc]') == "-1" else pymongo.ASCENDING
-    if allow_key and sort_key in allow_key:
-        return sort_key, sort_order
-    elif allow_key is None and sort_key:
-        return sort_key, sort_order
+    order_by = request.args.get('order.by')
+    order_asc = pymongo.DESCENDING if request.args.get('order.asc') == "-1" else pymongo.ASCENDING
+    if allow_key and order_by in allow_key:
+        return order_by, order_asc
+    elif allow_key is None and order_by:
+        return order_by, order_asc
     else:
         return default_key, default_sort

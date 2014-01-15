@@ -54,15 +54,17 @@
         $scope.total = 100;
         $scope.pageSize = 5;
         $scope.allSelected = false;
+        $scope.order = {};
         $scope.filters = {};
 
         //init
         angular.forEach($location.search(), function (value, key) {
             //if (key == 'page') $scope.page = value;
             if (key == 'size') $scope.size = value;
-            else if (key.indexOf('filters.') == 0) {
+            else if (key.indexOf('filters.') == 0)
                 $scope.filters[key.replace('filters.', '')] = value;
-            }
+            else if (key.indexOf('order.') == 0)
+                $scope.order[key.replace('order.', '')] = value;
         });
 
         //selection
@@ -89,10 +91,22 @@
             angular.forEach($scope.filters, function (value, key) {
                 ss['filters.' + key] = value;
             });
+            angular.forEach($scope.order, function (value, key) {
+                ss['order.' + key] = value;
+            });
             $location.search(ss);
         };
 
         $scope.$watch('page', $scope.setLocation);
+
+        $scope.sort = function (key) {
+            if ($scope.order.by == key && $scope.order.asc == -1)
+                $scope.order.asc = 1;
+            else
+                $scope.order.asc = -1;
+            $scope.order.by = key;
+            $scope.setLocation();
+        };
 
         //update
         $scope.update = function () {
@@ -101,7 +115,8 @@
             var data = {
                 page: $scope.page,
                 size: $scope.size,
-                filters: $scope.filters
+                filters: $scope.filters,
+                order: $scope.order
             };
             $http.get(angular.queryString($scope.url, data)).success(function (json) {
                 $loading.end();

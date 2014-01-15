@@ -51,7 +51,8 @@ class UserAPI(MethodView):
             #if request.args.get('filters.role'):
             #    filters.update({'role.$ref': 'role', 'role.$id': ObjectId(request.args.get('filters.role'))})
 
-            models = db.User.find(filters)
+            sort = html.get_sort()
+            models = db.User.find(filters).sort(sort[0], sort[1])
 
             ks = ['_id', 'name', 'email', 'status', ('role', 'name'), 'signin_ip', 'signin_time']
             return html.get_table(models, ks, 'name')
