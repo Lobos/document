@@ -34,6 +34,29 @@
     </form>
 {%- endmacro %}
 
+{% macro thead() -%}
+    <thead>
+        <tr>{{ caller() }}</tr>
+    </thead>
+{%- endmacro %}
+{% macro th_select() -%}
+    <th style="width: 30px;"><i ng-class="{'icon':true, 'icon-square-o':!allSelected, 'icon-check-square-o':allSelected}" ng-click="selectAll()"></i></th>
+{%- endmacro %}
+{% macro th_sort(key, text, class='', style='') -%}
+    <th class="{{ class }}" style="{{ style }}" ng-click="sort('{{ key }}')">{{ text }} <i ng-class="{'icon':true, 'icon-sort':order.by!='{{ key }}', 'icon-sort-up':order.by=='{{ key }}'&&order.asc==1, 'icon-sort-down':order.by=='{{ key }}'&&order.asc==-1}"></i></th>
+{%- endmacro %}
+
+{% macro tbody() -%}
+    <tbody>
+        <tr ng-click="item.$isChecked=!item.$isChecked" ng-class="{'active':item.$isChecked}" ng-repeat="item in data">
+            {{ caller() }}
+        </tr>
+    </tbody>
+{%- endmacro %}
+{% macro td_select() -%}
+    <td><i ng-class="{'icon':true, 'icon-square-o':!item.$isChecked, 'icon-check-square-o':item.$isChecked}"></i></td>
+{%- endmacro %}
+
 
 {% macro form_group(label=None, size=[2,10]) -%}
     <div class="form-group">

@@ -10,32 +10,26 @@
             <label class="form-group"><input class="form-control" placeholder="Email" ng-model="filters.email" /></label>
         {% endcall %}
         <table class="table table-listed">
-            <thead>
-                <tr>
-                    <th style="width: 30px;"><i ng-class="{'icon':true, 'icon-square-o':!allSelected, 'icon-check-square-o':allSelected}" ng-click="selectAll()"></i></th>
-                    <th style="width: 20px;"></th>
-                    <th><a href="javascript:;" ng-click="sort('name')">昵称 <i ng-class=""></i></a></th>
-                    <th>邮箱</th>
-                    <th>角色</th>
-                    <th class="text-center">状态</th>
-                    <th>最后登录IP</th>
-                    <th style="width: 180px;">最后登录时间</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr ng-click="item.$isChecked=!item.$isChecked" ng-class="{'active':item.$isChecked}" ng-repeat="item in data">
-                    <td><i ng-class="{'icon':true, 'icon-square-o':!item.$isChecked, 'icon-check-square-o':item.$isChecked}"></i></td>
-                    <td>
-                        <a ng-href="user.edit#{{item._id}}"><i class="icon icon-edit"></i></a>
-                    </td>
-                    <td>{{item.name}}</td>
-                    <td>{{item.email}}</td>
-                    <td>{{item.role_name}}</td>
-                    <td class="text-center" ng-bind-html="item.status|status"></td>
-                    <td>{{item.signin_ip}}</td>
-                    <td>{{item.signin_time}}</td>
-                </tr>
-            </tbody>
+            {% call _cxt.thead() %}
+                {{ _cxt.th_select() }}
+                <th style="width: 20px;"></th>
+                {{ _cxt.th_sort('name', '昵称') }}
+                {{ _cxt.th_sort('email', '邮箱') }}
+                <th>角色</th>
+                <th class="text-center">状态</th>
+                <th>最后登录IP</th>
+                {{ _cxt.th_sort('signin_time', '最后登录时间', 'col-md-2') }}
+            {% endcall %}
+            {% call _cxt.tbody() %}
+                {{ _cxt.td_select() }}
+                <td><a ng-href="user.edit#{{item._id}}"><i class="icon icon-edit"></i></a></td>
+                <td>{{item.name}}</td>
+                <td>{{item.email}}</td>
+                <td>{{item.role_name}}</td>
+                <td class="text-center" ng-bind-html="item.status|status"></td>
+                <td>{{item.signin_ip}}</td>
+                <td>{{item.signin_time}}</td>
+            {% endcall %}
         </table>
         {{ _cxt.pagination() }}
     </div>

@@ -10,29 +10,25 @@
             <label class="form-group"><input class="form-control" placeholder="名称" ng-model="filters.name" /></label>
         {% endcall %}
         <table class="table table-listed">
-            <thead>
-                <tr>
-                    <th style="width: 30px;"><i ng-class="{'icon':true, 'icon-square-o':!allSelected, 'icon-check-square-o':allSelected}" ng-click="selectAll()"></i></th>
-                    <th style="width: 50px;"></th>
-                    <th>角色名称</th>
-                    <th class="text-center">后台管理</th>
-                    <th>说明</th>
-                    <th style="width: 180px;">最后修改时间</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr ng-click="item.$isChecked=!item.$isChecked" ng-class="{'active':item.$isChecked}" ng-repeat="item in data">
-                    <td><i ng-class="{'icon':true, 'icon-square-o':!item.$isChecked, 'icon-check-square-o':item.$isChecked}"></i></td>
-                    <td>
-                        <a ng-href="role.edit#{{item._id}}"><i class="icon icon-edit"></i></a>
-                        <a href="javascript:;" ng-click="remove(item._id)"><i class="icon icon-trash-o text-danger"></i></a>
-                    </td>
-                    <td>{{item.name}}</td>
-                    <td class="text-center" ng-bind-html="item.is_admin|status"></td>
-                    <td>{{item.desc}}</td>
-                    <td>{{item.edit_time}}</td>
-                </tr>
-            </tbody>
+            {% call _cxt.thead() %}
+                {{ _cxt.th_select() }}
+                <th style="width: 50px;"></th>
+                {{ _cxt.th_sort('name', '角色名称') }}
+                <th class="text-center">后台管理</th>
+                <th>说明</th>
+                {{ _cxt.th_sort('edit_time', '最后修改时间', 'col-md-2') }}
+            {% endcall %}
+            {% call _cxt.tbody() %}
+                {{ _cxt.td_select() }}
+                <td>
+                    <a ng-href="role.edit#{{item._id}}"><i class="icon icon-edit"></i></a>
+                    <a href="javascript:;" ng-click="remove(item._id)"><i class="icon icon-trash-o text-danger"></i></a>
+                </td>
+                <td>{{item.name}}</td>
+                <td class="text-center" ng-bind-html="item.is_admin|status"></td>
+                <td>{{item.desc}}</td>
+                <td>{{item.edit_time}}</td>
+            {% endcall %}
         </table>
         {{ _cxt.pagination() }}
     </div>

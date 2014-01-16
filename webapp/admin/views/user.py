@@ -13,14 +13,14 @@ bp = Blueprint('user', __name__)
 
 @bp.route('/user/list')
 @ck_auth('user.edit', 'html')
-@cache.cached()
+#@cache.cached()
 def user_list():
     return render_template('user/list.html')
 
 
 @bp.route('/user/edit')
 @ck_auth('user.edit', 'html')
-@cache.cached()
+#@cache.cached()
 def user_edit():
     roles = db.Role.find()
     return render_template('user/edit.html', roles=roles)
