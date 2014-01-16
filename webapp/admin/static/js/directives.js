@@ -19,7 +19,7 @@
         return {
             restrict: 'ECA',
             priority: 400,
-            link: function ($scope, $element, $attr, ctrl) {
+            link: function (scope, element, attr, ctrl) {
                 var refract = function (src) {
                     var index = src.indexOf('?');
                     if (index <= 0)
@@ -38,7 +38,7 @@
                     }
                 };
 
-                $scope.$watch(function () { return $location.url(); }, function (src) {
+                scope.$watch(function () { return $location.url(); }, function (src) {
                     if (src == '/') return;
                     src = refract(src);
                     $loading.start();
@@ -47,10 +47,10 @@
                     $http.get(src, {cache: $templateCache}).success(function (response) {
                         $loading.end();
                         if (thisChangeId !== changeCounter) return;
-                        var newScope = $scope.$new();
+                        var newScope = scope.$new();
 
-                        $element.html(response);
-                        $compile($element.contents())(newScope);
+                        element.html(response);
+                        $compile(element.contents())(newScope);
 
                         clearUp();
                         currentScope = newScope;
@@ -60,6 +60,21 @@
                         $message.inform('页面获取失败');
                     });
                 });
+            }
+        };
+    }];
+
+
+    app.directive.treeview = ['$http', '$compile', function ($http, $compile) {
+        return {
+            restrict: 'EA',
+            template: '<li>{{treeData}}</li>',
+            scope: {
+                treeData: '='
+            },
+            link: function (scope, element, attr, ctrl) {
+                var src = attr.treeview || attr.src;
+                //scope.treeData = src;
             }
         };
     }];

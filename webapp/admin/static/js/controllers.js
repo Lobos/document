@@ -131,7 +131,7 @@
         };
 
         // remove
-        var modal = function (txt, fn) {
+        var modal = function (txt, fn, args) {
             var _scope = $scope;
             $modal.open({
                 templateUrl: "/static/templates/confirm.html",
@@ -140,7 +140,7 @@
                 controller: function ($scope, $modalInstance) {
                     $scope.content = txt;
                     $scope.submit = function () {
-                        fn.success(function (json) {
+                        fn.apply($http, args).success(function (json) {
                             $loading.end();
                             _scope.update();
                             $message.inform(json.msg);
@@ -167,11 +167,11 @@
             }
             $scope.noSelected = false;
 
-            modal('确定要删除这 ' + length + ' 个项目吗？', $http.post(url, {ids: selects}));
+            modal('确定要删除这 ' + length + ' 个项目吗？', $http.post, [url, {ids: selects}]);
         };
 
         $scope.remove = function (id) {
-            modal('确定要删除吗？', $http.delete($scope.url + id));
+            modal('确定要删除吗？', $http.delete, [$scope.url + id]);
         };
     };
 
