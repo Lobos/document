@@ -2,7 +2,7 @@
     'use strict';
 
     angular.module('app', [
-            'ngSanitize', 'ui.bootstrap'
+            'ngSanitize', 'ui.bootstrap', 'ui.utils'
         ]).
         config(function($locationProvider, $compileProvider) {
             $locationProvider.html5Mode(true).hashPrefix('!');

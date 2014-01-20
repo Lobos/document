@@ -206,75 +206,8 @@
                 }
             });
         };
-    };
-
-
-    app.controller.treeCtrl = function ($scope, $http, $attrs) {
-        $scope.data = [];
-
-        var setStatus = function (item, status) {
-            item.status = status;
-            angular.forEach(item.children, function (sub) {
-                setStatus(sub, status);
-            });
-        };
-
-        var setParentsStatus = function (items) {
-            var _set = function (item) {
-                var list = [];
-                if (item.children.length == 0) {
-                    if (list.indexOf(item.status) < 0)
-                        list.push(item.status);
-                } else {
-                    angular.forEach(item.children, function (sub) {
-                        angular.forEach(_set(sub), function (s) {
-                            if (list.indexOf(s) < 0)
-                                list.push(s);
-                        });
-                    });
-                    if (list.length == 1)
-                        item.status = list[0];
-                    else if (list.length == 2)
-                        item.status = 1;
-                }
-                return list;
-            };
-            angular.forEach(items, function (item) {
-                _set(item);
-            });
-        };
-
-        $scope.select = function (item) {
-            var status = item.status < 2 ? 2 : 0;
-            setStatus(item, status);
-            setParentsStatus($scope.data);
-        };
-
-        var init = function (slist) {
-            var _set = function (items) {
-                angular.forEach(items, function (item) {
-                    if (item.children.length == 0) {
-                        if (slist.indexOf(item._id) >= 0)
-                            item.status = 2;
-                        else
-                            item.status = 0;
-                    } else {
-                        _set(item.children);
-                    }
-                });
-            };
-            _set($scope.data);
-        };
-
-        $http.get($attrs.src).success(function (json) {
-            $scope.data = json.data;
-            angular.forEach($scope.data, function (item) {
-                //setStatus(item, 0);
-            });
-            init($scope.model.admin_auth_list);
-            setParentsStatus($scope.data);
-        });
 
     };
+
 })();
 

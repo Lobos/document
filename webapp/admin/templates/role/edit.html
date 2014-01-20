@@ -1,18 +1,10 @@
 {% import "_context.html" as _cxt %}
 {% set _form = "mainform" %}
-<div ng-controller="EditCtrl" url="{{ url_for("role_api") }}" ng-init="getEntry()">
+<div ng-controller="EditCtrl" url="{{ url_for("role_api") }}" ng-init="getEntry();">
     {% call _cxt.header('角色管理', '角色编辑') %}
         {{ _cxt.header_save(_form) }}
         {{ _cxt.header_cancel() }}
     {% endcall %}
-    <script type="text/ng-template" id="tree_render">
-        <i ng-class="{'icon':true, 'icon-minus-circle':!t.fold&&t.type=='folder', 'icon-plus-circle':t.fold&&t.type=='folder'}" ng-click="t.fold=!t.fold"></i>
-        <i ng-class="{'icon':true, 'icon-square-o':t.status==0, 'icon-check-square-o':t.status==1, 'icon-check-square':t.status==2}" ng-click="select(t)"></i>
-        {{t.text}}
-        <ul class="list-unstyled" ng-hide="t.fold">
-            <li ng-repeat="t in t.children" ng-include="'tree_render'"></li>
-        </ul>
-    </script>
     <div class="page-content scrollable">
         <form class="form-horizontal" ng-submit="submit()" novalidate name="{{ _form }}" role="form">
             {% call _cxt.form_group('角色名称', size=[2,5]) %}
@@ -20,10 +12,7 @@
             {% endcall %}
 
             {% call _cxt.form_group('权限') %}
-                <ul class="treeview list-unstyled" ng-controller="treeCtrl" src="{{ url_for('role.menu_tree') }}">
-                    <input ng-model="model.admin_auth_list" />
-                    <li ng-repeat="t in data" ng-include="'tree_render'"></li>
-                </ul>
+                <treeview src="{{ url_for('role.menu_tree') }}" model="model.admin_auth_list"></treeview>
             {% endcall %}
 
             {% call _cxt.form_group('备注') %}

@@ -64,17 +64,4 @@
         };
     }];
 
-
-    app.directive.treeview = ['$http', '$compile', function ($http, $compile) {
-        return {
-            restrict: 'EA',
-            template: '<li ng-repeat="t in treeData">' +
-                '<a>{{t._id}}</a>' +
-                '<ul treeview="t.children"></ul>' +
-                '</li>',
-            scope: {
-                treeData: '='
-            }
-        };
-    }];
 })();
