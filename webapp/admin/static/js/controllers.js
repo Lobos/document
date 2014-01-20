@@ -206,7 +206,7 @@
         };
 
         $scope.submit = function () {
-            if (!$scope.mainform.$valid) return;
+            if (!$scope.form.$valid) return;
             $loading.start();
 
             var hp = $scope.hash ? $http.put($scope.url+$scope.hash, $scope.model) : $http.post($scope.url, $scope.model);
