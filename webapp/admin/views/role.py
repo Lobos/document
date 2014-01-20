@@ -32,8 +32,8 @@ def menu_tree():
     for c in MENU:
         l.append(_get_tree(c))
     result = {
-        'status':1,
-        'data':l
+        'status': 1,
+        'data': l
     }
     return json.dumps(result, default = tree.encode_tree)
 
@@ -100,7 +100,13 @@ class RoleAPI(MethodView):
         if count > 0:
             return render_json(u'%s 下有 %s 个用户，不能删除.' % (model['name'], count))
 
-        model.delete()
+        #model.delete()
+        #m = db.Trash()
+        #m['op_time'] = cn_time_now()
+        #m['data'] = db.role.find_one({'_id': ObjectId(_id)})
+        #m.save()
+        db.trash.insert(db.role.find_one({'_id': ObjectId(_id)}))
+
         return render_json(u'成功删除')
 
 

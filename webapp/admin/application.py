@@ -3,8 +3,9 @@ from flask import request, render_template, redirect, url_for
 
 
 def register_db(db):
-    from ..models import Icon, Role, User
-    db.register([Icon, Role, User])
+    from ..models import\
+                 Icon, Role, User, Trash
+    db.register([Icon, Role, User, Trash])
 
 
 def register_views():
