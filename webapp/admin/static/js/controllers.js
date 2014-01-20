@@ -65,7 +65,7 @@
         $scope.page = $location.search().page || $attrs.page || 1;
         $scope.size = $attrs.size || 30;
         $scope.data = [];
-        $scope.total = 100;
+        $scope.total = 0;
         $scope.pageSize = 5;
         $scope.allSelected = false;
         $scope.order = {};

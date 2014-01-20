@@ -94,7 +94,14 @@ class RoleAPI(MethodView):
         return render_json(u'%s 保存成功.' % model['name'], 1)
 
     def delete(self, _id):
-        pass
+        #需要剔除有用户的，操作不会太多，不增加冗余字段保存用户数
+        count = db.User.find({'role.$ref': 'role', 'role.$id': ObjectId(_id)}).count()
+        model = db.Role.get_from_id(ObjectId(_id))
+        if count > 0:
+            return render_json(u'%s 下有 %s 个用户，不能删除.' % (model['name'], count))
+
+        model.delete()
+        return render_json(u'成功删除')
 
 
 def register():
