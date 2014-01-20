@@ -44,7 +44,7 @@
     <th style="width: 30px;"><i ng-class="{'icon':true, 'icon-square-o':!allSelected, 'icon-check-square-o':allSelected}" ng-click="selectAll()"></i></th>
 {%- endmacro %}
 {% macro th_sort(key, text, class='', style='') -%}
-    <th class="{{ class }}" style="{{ style }}" ng-click="sort('{{ key }}')">{{ text }} <i ng-class="{'icon':true, 'icon-sort':order.by!='{{ key }}', 'icon-sort-up':order.by=='{{ key }}'&&order.asc==1, 'icon-sort-down':order.by=='{{ key }}'&&order.asc==-1}"></i></th>
+    <th class="sort {{ class }}" style="{{ style }}" ng-click="sort('{{ key }}')">{{ text }} <i ng-class="{'icon':true, 'icon-sort':order.by!='{{ key }}', 'icon-sort-up':order.by=='{{ key }}'&&order.asc==1, 'icon-sort-down':order.by=='{{ key }}'&&order.asc==-1}"></i></th>
 {%- endmacro %}
 
 {% macro tbody() -%}

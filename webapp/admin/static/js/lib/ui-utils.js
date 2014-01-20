@@ -104,8 +104,7 @@ angular.module('ui.utils.treeview', [])
             templateUrl: 'template/utils/tree_view',
             replace: true,
             scope: {
-                model: '=',
-                onSelect: '&'
+                model: '='
             },
             link: function(scope, element, attrs, ctrl) {
             }

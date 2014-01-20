@@ -1,11 +1,12 @@
 # -*- coding:utf-8 -*-
 
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, request
 from flask.views import MethodView
-from ..helpers import json, tree, html, cn_time_now
+from bson import ObjectId
+from ..helpers import json, tree, html, cn_time_now, user
 from ..helpers.user import ck_auth
 from .. import app, db, cache
-from . import register_api
+from . import register_api, render_json
 from .menu import MENU
 
 bp = Blueprint('role', __name__)
@@ -61,10 +62,36 @@ class RoleAPI(MethodView):
             return html.get_entry(model, ks)
 
     def post(self):
-        pass
+        f = request.json
+        model = db.Role()
+        exist = db.Role.find({'name': f.get('name')}).count() > 0
+
+        return self.save(exist, model, f)
 
     def put(self, _id):
-        pass
+        f = request.json
+        model = db.Role.get_from_id(ObjectId(_id))
+        exist = db.Role.find({'name': f.get('name'), '_id': {'$ne':ObjectId(_id)}}).count() > 0
+
+        return self.save(exist, model, f)
+
+    @staticmethod
+    def save(exist, model, f):
+        if exist:
+            return render_json(u'已经有一个角色"%s"存在，保存失败了...' % f.get('name'))
+
+        html.clone_property(model, f, 'name', 'desc')
+        model['is_admin'] = f.get('is_admin')
+        model['admin_auth_list'] = f.get('admin_auth_list')
+        #model['user_auth_list'] = f.get('user_auth_list').split(',')
+        u = user.get_user()
+        model['edit_userid'] = ObjectId(u['_id'])
+        model['edit_username'] = u['name']
+        model['edit_time'] = cn_time_now()
+
+        model.save()
+
+        return render_json(u'%s 保存成功.' % model['name'], 1)
 
     def delete(self, _id):
         pass

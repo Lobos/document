@@ -1,18 +1,32 @@
 (function () {
     'use strict';
 
+    var hasOwnProperty = Object.prototype.hasOwnProperty;
+
+    var isEmpty = function (obj) {
+        if (obj == null) return true;
+        if (obj.length > 0)    return false;
+        if (obj.length === 0)  return true;
+        for (var key in obj) {
+            if (hasOwnProperty.call(obj, key)) return false;
+        }
+        return true;
+    };
+
     angular.queryString = function(url, data){
         var qs = function (obj, prefix) {
             var str = [];
             for (var p in obj) {
                 var k = prefix ? prefix + "." + p : p,
                     v = obj[p];
-                str.push(angular.isObject(v) ? qs(v, k) : (k) + "=" + encodeURIComponent(v));
+                var querystr = angular.isObject(v) ? qs(v, k) : (k) + "=" + encodeURIComponent(v);
+                if (querystr)
+                    str.push(querystr);
             }
             return str.join("&");
         };
         var s = qs(data);
-        if (s) url = url + "?" + s;
+        if (s) url += "?" + s;
         return url;
     };
 

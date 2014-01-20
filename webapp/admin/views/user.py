@@ -26,21 +26,6 @@ def user_edit():
     return render_template('user/edit.html', roles=roles)
 
 
-def user_save(model, f):
-    model['status'] = f.get('status', False)
-
-    model['name'] = f.get('name')
-    model['email'] = f.get('email')
-    if f.get('password'):
-        model['password'] = db.User.encode_pwd(f.get('password'))
-    if f.get('role__id'):
-        model['role'] = db.Role.get_from_id(ObjectId(f.get('role__id')))
-    model['edit_time'] = cn_time_now()
-
-    model.save()
-    return render_json(u'%s 保存成功.' % model['name'], 1)
-
-
 # === MethodView ===================================================
 class UserAPI(MethodView):
 
@@ -76,7 +61,7 @@ class UserAPI(MethodView):
                 return render_json(u'修改失败，系统至少有一个启用的管理账号')
 
         model = db.User.get_from_id(ObjectId(_id))
-        return user_save(model, f)
+        return self.save(model, f)
 
     def post(self):
         f = request.json
@@ -89,11 +74,26 @@ class UserAPI(MethodView):
             return render_json(u'新添加用户密码不能为空。')
 
         model = db.User()
-        return user_save(model, f)
+        return self.save(model, f)
 
     def delete(self, _id):
         #管理员不能删除
         pass
+
+    @staticmethod
+    def save(model, f):
+        model['status'] = f.get('status', False)
+
+        model['name'] = f.get('name')
+        model['email'] = f.get('email')
+        if f.get('password'):
+            model['password'] = db.User.encode_pwd(f.get('password'))
+        if f.get('role__id'):
+            model['role'] = db.Role.get_from_id(ObjectId(f.get('role__id')))
+        model['edit_time'] = cn_time_now()
+
+        model.save()
+        return render_json(u'%s 保存成功.' % model['name'], 1)
 
 
 def register():
