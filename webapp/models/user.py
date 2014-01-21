@@ -4,7 +4,7 @@ import base64
 from datetime import datetime, timedelta
 from flask import request
 from flask.ext.mongokit import Document
-from ..utils import pydes, json, md5
+from ..utils import pydes, json, md5, zip_str
 from . import ObjectId
 from .icon import Icon
 
@@ -47,8 +47,8 @@ class User(Document):
 
     @staticmethod
     def encode_pwd(pwd):
-        pwd += '' #上线后就不要改了，否则...
-        return md5(pwd)
+        salt = u'fnXVY0mYvya9' #上线后就不要改了，否则...
+        return md5(zip_str(pwd, salt))
 
     @staticmethod
     def signin(user, email, password, encode_pwd=False):
