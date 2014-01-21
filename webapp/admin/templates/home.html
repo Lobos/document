@@ -18,11 +18,11 @@
         <a class="menu-hidden-desktop" href="javascript:"><i class="icon-reorder"></i> 菜单</a>
     </div>
 
-    <div ng-show="informs.length>0&&loading()<=0" class="message-top" ng-controller="MessageCtrl">
-        <div ng-repeat="inform in informs" class="alert {{inform.alertClass}} {{inform.dismiss!=0?'alert-dismissable':''}} fade in informer">
+    <div ng-show="informs.length>0&&loading()<=0" class="message-top" src="{{ url_for('trash_api') }}" ng-controller="MessageCtrl">
+        <div ng-repeat="inform in informs" class="alert alert-{{inform.type}} {{inform.dismiss!=0?'alert-dismissable':''}} fade in informer">
             <button ng-show="inform.dismiss!=0" type="button" ng-click="close($index)" class="close">×</button>
-            <p ng-bind-html="inform.message"></p>
-            <a href="javascript:;" ng-click="undo(1234)">撤销</a>
+            {{inform.message}} &nbsp;
+            <a ng-show="inform.undo" href="javascript:;" ng-click="undo(inform.undo)">撤销 <i class="icon icon-reply"></i></a>
         </div>
     </div>
 

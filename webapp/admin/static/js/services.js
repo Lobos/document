@@ -4,31 +4,25 @@
     app.serviceFactory.$message = function ($timeout) {
         var informs = [];
         var timer;
+        var defOptions = {
+            dismiss: 6,
+            type: 'warning'
+        };
 
         return {
             get: function () {
                 return informs;
             },
-            inform: function (message, type, dismiss) {
-                if (!angular.isDefined(type)) {
-                    type = 'warning';
-                    dismiss = 6;
-                } else if (angular.isNumber(type)) {
-                    dismiss = type;
-                    type = 'warning';
-                }
-                if (!angular.isDefined(dismiss))
-                    dismiss = 6;
-                informs[0] = {
-                    alertClass: 'alert-' + type,
-                    message: message,
-                    dismiss: dismiss
-                };
+            inform: function (message, options) {
+                options = angular.extend({}, defOptions, options || {});
+                informs[0] = angular.extend({
+                    message: message
+                }, options);
 
-                if (dismiss != 0)
+                if (options.dismiss != 0)
                     timer = $timeout(function () {
                         informs.splice(0, 1);
-                    }, dismiss * 1000);
+                    }, options.dismiss * 1000);
                 else
                     $timeout.cancel(timer);
             },

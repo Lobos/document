@@ -32,15 +32,15 @@ class TrashAPI(MethodView):
 
 def dump(col, obj):
     user = get_user()
-    #db.trash.insert({
-    #    '_id': obj['_id'],
-    #    'collection': col,
-    #    'dump_time': cn_time_now(),
-    #    'obj': obj,
-    #    'edit_userid': ObjectId(user['_id']),
-    #    'edit_username': user['name']
-    #})
-    #obj.delete()
+    db.trash.insert({
+        '_id': obj['_id'],
+        'collection': col,
+        'dump_time': cn_time_now(),
+        'obj': obj,
+        'edit_userid': ObjectId(user['_id']),
+        'edit_username': user['name']
+    })
+    obj.delete()
     return render_json(u'删除成功！', undo=str(obj['_id']))
 
 

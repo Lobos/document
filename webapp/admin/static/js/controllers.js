@@ -30,9 +30,6 @@
         return url;
     };
 
-    /*
-    即使用不到$location，也要在参数中传入，否则 href 不会 rewrite
-     */
     app.controller.AppCtrl = function ($scope, $location, $loading) {
         $scope.currentPage = '';
         $scope.loading = $loading.get;
@@ -51,6 +48,8 @@
         $scope.undo = function (id) {
             $http.put($attrs.src + id).success(function (json) {
                 $message.inform(json.msg);
+                if (json.status == 1)
+                    window.location.reload();
             }).error(function () {
                 $message.inform('server error');
             });
@@ -165,7 +164,10 @@
                         fn.apply($http, args).success(function (json) {
                             $loading.end();
                             _scope.update();
-                            $message.inform(json.msg, 20);
+                            $message.inform(json.msg, {
+                                dismiss: 20,
+                                undo: json.undo
+                            });
                         }).error(function () {
                             $message.inform('server error');
                         });
@@ -224,7 +226,9 @@
                     $message.inform(json.msg);
                     $scope.back();
                 } else {
-                    $message.inform(json.msg, 'danger');
+                    $message.inform(json.msg, {
+                        type: 'danger'
+                    });
                 }
             });
         };
