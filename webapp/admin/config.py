@@ -16,3 +16,9 @@ class DefaultConfig(BaseConfig):
     MONGODB_HOST = "localhost"
     MONGODB_PORT = 27017
     MONGODB_DATABASE = "fas"
+
+
+class TestConfig(BaseConfig):
+    MONGODB_HOST = "localhost"
+    MONGODB_PORT = 27017
+    MONGODB_DATABASE = "test"

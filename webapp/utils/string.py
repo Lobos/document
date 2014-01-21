@@ -73,3 +73,14 @@ def md5(s):
 def markdown(s, safe_mode=False):
     md = Markdown(safe_mode=safe_mode)
     return md.convert(s)
+
+
+def zip_str(val, des):
+    l = len(val) if len(val) < len(des) else len(des)
+    s = []
+    for i in range(l):
+        s.append(val[i])
+        s.append(des[i])
+    s.append(val[l:])
+    s.append(des[l:])
+    return ''.join(s)
