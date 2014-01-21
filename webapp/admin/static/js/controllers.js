@@ -42,10 +42,18 @@
         };
     };
 
-    app.controller.MessageCtrl = function ($scope, $message) {
+    app.controller.MessageCtrl = function ($scope, $message, $attrs, $http) {
         $scope.informs = $message.get();
         $scope.close = function (index) {
             $message.close(index);
+        };
+
+        $scope.undo = function (id) {
+            $http.put($attrs.src + id).success(function (json) {
+                $message.inform(json.msg);
+            }).error(function () {
+                $message.inform('server error');
+            });
         };
     };
 
@@ -157,7 +165,7 @@
                         fn.apply($http, args).success(function (json) {
                             $loading.end();
                             _scope.update();
-                            $message.inform(json.msg);
+                            $message.inform(json.msg, 20);
                         }).error(function () {
                             $message.inform('server error');
                         });

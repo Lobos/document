@@ -3,10 +3,9 @@
 from flask import Blueprint, request, jsonify, render_template
 from flask.views import MethodView
 from bson import ObjectId
-from ..helpers.user import ck_auth
 from ..helpers import html, cn_time_now
 from .. import app, db, cache
-from . import render_json, register_api
+from . import render_json, register_api, ck_auth, get_user
 
 bp = Blueprint('user', __name__)
 

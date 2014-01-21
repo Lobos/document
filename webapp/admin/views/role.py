@@ -3,10 +3,9 @@
 from flask import Blueprint, render_template, request
 from flask.views import MethodView
 from bson import ObjectId
-from ..helpers import json, tree, html, cn_time_now, user
-from ..helpers.user import ck_auth
+from ..helpers import json, tree, html, cn_time_now
 from .. import app, db, cache
-from . import register_api, render_json
+from . import register_api, render_json, ck_auth, get_user, trash
 from .menu import MENU
 
 bp = Blueprint('role', __name__)
@@ -84,9 +83,9 @@ class RoleAPI(MethodView):
         model['is_admin'] = f.get('is_admin')
         model['admin_auth_list'] = f.get('admin_auth_list')
         #model['user_auth_list'] = f.get('user_auth_list').split(',')
-        u = user.get_user()
-        model['edit_userid'] = ObjectId(u['_id'])
-        model['edit_username'] = u['name']
+        user = get_user()
+        model['edit_userid'] = ObjectId(user['_id'])
+        model['edit_username'] = user['name']
         model['edit_time'] = cn_time_now()
 
         model.save()
@@ -100,14 +99,7 @@ class RoleAPI(MethodView):
         if count > 0:
             return render_json(u'%s 下有 %s 个用户，不能删除.' % (model['name'], count))
 
-        #model.delete()
-        #m = db.Trash()
-        #m['op_time'] = cn_time_now()
-        #m['data'] = db.role.find_one({'_id': ObjectId(_id)})
-        #m.save()
-        db.trash.insert(db.role.find_one({'_id': ObjectId(_id)}))
-
-        return render_json(u'成功删除')
+        return trash.dump('role', model)
 
 
 def register():

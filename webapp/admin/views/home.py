@@ -3,8 +3,7 @@
 import datetime
 from flask import Blueprint, render_template, request, session, make_response, jsonify
 from .. import app, db
-from ..helpers import user
-from . import render_json
+from . import render_json, ck_signin, get_user, signin, cookie_encode, COOKIE_USER, SESSION_USER
 from .menu import MENU
 
 bp = Blueprint("home", __name__)
@@ -12,9 +11,9 @@ bp = Blueprint("home", __name__)
 
 @bp.route('/')
 @bp.route('/<module>.<ctrl>')
-@user.ck_signin()
+@ck_signin()
 def index(module=None, ctrl=None):
-    return render_template("home.html", admin=user.get_user(), menu=MENU)
+    return render_template("home.html", admin=get_user(), menu=MENU)
 
 
 # == signin ========================================
@@ -25,15 +24,15 @@ def signin():
 
     email = request.json.get('email')
     password = db.User.encode_pwd(request.json.get('password'))
-    entity = user.signin(email, password)
+    entity = signin(email, password)
     if entity and entity['is_admin']:
         resp = make_response(jsonify(status=1))
-        ds = user.cookie_encode(email, password)
+        ds = cookie_encode(email, password)
         if request.json.get('remember'):
             expires = datetime.datetime.now() + datetime.timedelta(days=365)
-            resp.set_cookie(user.COOKIE_USER, ds, expires=expires)
+            resp.set_cookie(COOKIE_USER, ds, expires=expires)
         else:
-            resp.set_cookie(user.COOKIE_USER, ds)
+            resp.set_cookie(COOKIE_USER, ds)
         return resp
 
     else:
@@ -42,11 +41,11 @@ def signin():
 
 @bp.route('/signout', methods=['GET', 'POST'])
 def signout():
-    session.pop(user.SESSION_USER, None)
+    session.pop(SESSION_USER, None)
 
     expires = datetime.datetime.now() - datetime.timedelta(days=1)
     resp = make_response(render_template('signin.html'))
-    resp.set_cookie(user.COOKIE_USER, '', expires=expires)
+    resp.set_cookie(COOKIE_USER, '', expires=expires)
     return resp
 
 

@@ -10,8 +10,8 @@ def register_db(db):
 
 def register_views():
     from views import \
-               home, user, role
-    for m in [home, user, role]:
+               home, user, role, trash
+    for m in [home, user, role, trash]:
         m.register()
 
 
