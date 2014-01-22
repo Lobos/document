@@ -18,7 +18,7 @@ def index(module=None, ctrl=None):
 
 # == signin ========================================
 @bp.route('/signin', methods=['GET', 'POST'])
-def signin():
+def sign_in():
     if request.method == 'GET':
         return render_template('signin.html')
 

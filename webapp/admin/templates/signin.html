@@ -42,7 +42,7 @@
             if (!$scope.sign_form.$valid) return;
             $scope.sending = true;
             $scope.msg = '登录中...';
-            $http.post('{{ url_for('home.signin') }}', $scope.user).success(function(json){
+            $http.post('{{ url_for('home.sign_in') }}', $scope.user).success(function(json){
                 $scope.sending = false;
                 if(json.status == 0) {
                     $scope.msg = json.msg;
