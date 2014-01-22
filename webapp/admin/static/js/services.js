@@ -1,19 +1,48 @@
 (function () {
     'use strict';
 
-    app.serviceFactory.$message = function ($timeout) {
+    app.serviceFactory.$global = function ($timeout) {
+        var obj = {};
+
+        // $reload ===========================================
+        var reload = null;
+        obj.$reload = {
+            load: function () {
+                if (reload) reload();
+                else window.location.reload();
+            },
+            set: function (fn) {
+                reload = fn;
+            }
+        };
+
+
+        // $loading ==========================================
+        var loadingStatus = 0;
+        obj.$loading = {
+            get: function () {
+                return loadingStatus;
+            },
+            start: function () {
+                loadingStatus++;
+            },
+            end: function () {
+                loadingStatus--;
+            }
+        };
+
+        // $message ===========================================
         var informs = [];
         var timer;
         var defOptions = {
             dismiss: 6,
             type: 'warning'
         };
-
-        return {
+        obj.$message = {
             get: function () {
                 return informs;
             },
-            inform: function (message, options) {
+            set: function (message, options) {
                 options = angular.extend({}, defOptions, options || {});
                 informs[0] = angular.extend({
                     message: message
@@ -31,22 +60,6 @@
             },
             clear: function () {
                 informs.splice(0, 1);
-            }
-        };
-    };
-
-    app.serviceFactory.$global = function () {
-        var obj = {},
-            loading = 0;
-        obj.$loading = {
-            get: function () {
-                return loading;
-            },
-            start: function () {
-                loading++;
-            },
-            end: function () {
-                loading--;
             }
         };
 

@@ -39,19 +39,19 @@
         };
     };
 
-    app.controller.MessageCtrl = function ($scope, $message, $attrs, $http) {
-        $scope.informs = $message.get();
+    app.controller.MessageCtrl = function ($scope, $global, $attrs, $http) {
+        $scope.informs = $global.$message.get();
         $scope.close = function (index) {
-            $message.close(index);
+            $global.$message.close(index);
         };
 
         $scope.undo = function (id) {
             $http.put($attrs.src + id).success(function (json) {
-                $message.inform(json.msg);
+                $global.$message.set(json.msg);
                 if (json.status == 1)
-                    window.location.reload();
+                    $global.$reload.load();
             }).error(function () {
-                $message.inform('server error');
+                $global.$message.set('server error');
             });
         };
     };
@@ -67,7 +67,7 @@
         };
     };
 
-    app.controller.ListTableCtrl = function ($scope, $http, $attrs, $location, $modal, $message, $global, $timeout) {
+    app.controller.ListTableCtrl = function ($scope, $http, $attrs, $location, $modal, $global, $timeout) {
         $scope.url = $attrs.url;
         $scope.page = $location.search().page || $attrs.page || 1;
         $scope.size = $attrs.size || 30;
@@ -150,6 +150,7 @@
                 }
             });
         };
+        $global.$reload.set($scope.update);
 
         // remove
         var modal = function (txt, fn, args) {
@@ -164,12 +165,12 @@
                         fn.apply($http, args).success(function (json) {
                             $global.$loading.end();
                             _scope.update();
-                            $message.inform(json.msg, {
+                            $global.$message.set(json.msg, {
                                 dismiss: 20,
                                 undo: json.undo
                             });
                         }).error(function () {
-                            $message.inform('server error');
+                            $global.$message.set('server error');
                         });
                         $modalInstance.dismiss('cancel');
                     };
@@ -199,7 +200,7 @@
         };
     };
 
-    app.controller.EditCtrl = function ($scope, $window, $attrs, $http, $location, $message, $global) {
+    app.controller.EditCtrl = function ($scope, $window, $attrs, $http, $location, $global) {
         $scope.url = $attrs.url;
         $scope.hash = $location.hash();
         $scope.model = {};
@@ -223,10 +224,10 @@
             hp.success(function (json) {
                 $global.$loading.end();
                 if (json.status == 1) {
-                    $message.inform(json.msg);
+                    $global.$message.set(json.msg);
                     $scope.back();
                 } else {
-                    $message.inform(json.msg, {
+                    $global.$message.set(json.msg, {
                         type: 'danger'
                     });
                 }

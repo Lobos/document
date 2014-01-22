@@ -14,8 +14,8 @@
         };
     }];
 
-    app.directive.pageInclude = ['$http', '$location', '$templateCache', '$compile', '$global', '$message',
-                       function ($http,   $location,   $templateCache,   $compile,   $global,   $message) {
+    app.directive.pageInclude = ['$http', '$location', '$templateCache', '$compile', '$global',
+                       function ($http,   $location,   $templateCache,   $compile,   $global) {
         return {
             restrict: 'ECA',
             priority: 400,
@@ -57,7 +57,7 @@
                     }).error(function () {
                         $global.$loading.end();
                         clearUp();
-                        $message.inform('页面获取失败');
+                        $global.$message.set('页面获取失败');
                     });
                 });
             }
