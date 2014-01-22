@@ -35,9 +35,10 @@
         };
     };
 
-    app.serviceFactory.$loading = function () {
-        var loading = 0;
-        return {
+    app.serviceFactory.$global = function () {
+        var obj = {},
+            loading = 0;
+        obj.$loading = {
             get: function () {
                 return loading;
             },
@@ -48,5 +49,7 @@
                 loading--;
             }
         };
+
+        return obj;
     };
 })();

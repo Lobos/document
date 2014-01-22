@@ -14,8 +14,8 @@
         };
     }];
 
-    app.directive.pageInclude = ['$http', '$location', '$templateCache', '$compile', '$loading', '$message',
-                       function ($http,   $location,   $templateCache,   $compile,   $loading,   $message) {
+    app.directive.pageInclude = ['$http', '$location', '$templateCache', '$compile', '$global', '$message',
+                       function ($http,   $location,   $templateCache,   $compile,   $global,   $message) {
         return {
             restrict: 'ECA',
             priority: 400,
@@ -41,11 +41,11 @@
                 scope.$watch(function () { return $location.url(); }, function (src) {
                     if (src == '/') return;
                     src = refract(src);
-                    $loading.start();
+                    $global.$loading.start();
 
                     var thisChangeId = ++changeCounter;
                     $http.get(src, {cache: $templateCache}).success(function (response) {
-                        $loading.end();
+                        $global.$loading.end();
                         if (thisChangeId !== changeCounter) return;
                         var newScope = scope.$new();
 
@@ -55,7 +55,7 @@
                         clearUp();
                         currentScope = newScope;
                     }).error(function () {
-                        $loading.end();
+                        $global.$loading.end();
                         clearUp();
                         $message.inform('页面获取失败');
                     });

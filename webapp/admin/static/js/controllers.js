@@ -30,12 +30,12 @@
         return url;
     };
 
-    app.controller.AppCtrl = function ($scope, $location, $loading) {
+    app.controller.AppCtrl = function ($scope, $location, $global) {
         $scope.currentPage = '';
-        $scope.loading = $loading.get;
+        $scope.loading = $global.$loading.get;
 
         $scope.afterPageLoad = function () {
-            $loading.end();
+            $global.$loading.end();
         };
     };
 
@@ -67,7 +67,7 @@
         };
     };
 
-    app.controller.ListTableCtrl = function ($scope, $http, $attrs, $location, $modal, $message, $loading, $timeout) {
+    app.controller.ListTableCtrl = function ($scope, $http, $attrs, $location, $modal, $message, $global, $timeout) {
         $scope.url = $attrs.url;
         $scope.page = $location.search().page || $attrs.page || 1;
         $scope.size = $attrs.size || 30;
@@ -131,7 +131,7 @@
 
         //update
         $scope.update = function () {
-            $loading.start();
+            $global.$loading.start();
             $scope.allSelected = false;
             var data = {
                 page: $scope.page,
@@ -140,7 +140,7 @@
                 order: $scope.order
             };
             $http.get(angular.queryString($scope.url, data)).success(function (json) {
-                $loading.end();
+                $global.$loading.end();
                 if (json.status == 1) {
                     $scope.total = json.total;
                     $scope.data = json.data;
@@ -162,7 +162,7 @@
                     $scope.content = txt;
                     $scope.submit = function () {
                         fn.apply($http, args).success(function (json) {
-                            $loading.end();
+                            $global.$loading.end();
                             _scope.update();
                             $message.inform(json.msg, {
                                 dismiss: 20,
@@ -199,7 +199,7 @@
         };
     };
 
-    app.controller.EditCtrl = function ($scope, $window, $attrs, $http, $location, $message, $loading) {
+    app.controller.EditCtrl = function ($scope, $window, $attrs, $http, $location, $message, $global) {
         $scope.url = $attrs.url;
         $scope.hash = $location.hash();
         $scope.model = {};
@@ -217,11 +217,11 @@
 
         $scope.submit = function () {
             if (!$scope.form.$valid) return;
-            $loading.start();
+            $global.$loading.start();
 
             var hp = $scope.hash ? $http.put($scope.url+$scope.hash, $scope.model) : $http.post($scope.url, $scope.model);
             hp.success(function (json) {
-                $loading.end();
+                $global.$loading.end();
                 if (json.status == 1) {
                     $message.inform(json.msg);
                     $scope.back();
