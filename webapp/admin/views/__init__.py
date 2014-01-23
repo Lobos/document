@@ -81,7 +81,7 @@ def ck_auth(url, t):
         def func(*args, **kwargs):
             u = get_user()
             if not u:
-                return redirect(url_for('home.signin'))
+                return redirect(url_for('home.sign_in'))
 
             suc = url in u['admin_auth_list']
 
@@ -101,7 +101,7 @@ def ck_signin():
             if u and u['is_admin']:
                 return f(*args, **kwargs)
             else:
-                return redirect(url_for('home.signin'))
+                return redirect(url_for('home.sign_in'))
 
         return func
     return decorator

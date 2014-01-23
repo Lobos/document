@@ -6,7 +6,7 @@ ROOT_OBJECT_ID = '000000000000000000000001'
 
 class Tree(object):
     def __init__(self, _id, pid, text, index=0, t='leaf'):
-        self._id = _id
+        self.id = _id
         self.pid = pid
         self.children = []
         self.type = t
@@ -23,7 +23,7 @@ def encode_tree(obj):
 def refactor(lst, root_pid):
     d = dict()
     for t in lst:
-        d[t._id] = t
+        d[t.id] = t
 
     l = list()
     for t in lst:

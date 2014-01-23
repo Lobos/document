@@ -4,8 +4,8 @@
 class BaseConfig(object):
     DEBUG = False
     DEV = False
-    SECRET_KEY = 'secret key'
-    DES_KEY = 'des_keys'
+    SECRET_KEY = 'FEfrwafQ%b2W'
+    DES_KEY = 'n2tLKMyq'
     CACHE_TYPE = "simple"
 
 
@@ -15,7 +15,7 @@ class DefaultConfig(BaseConfig):
 
     MONGODB_HOST = "localhost"
     MONGODB_PORT = 27017
-    MONGODB_DATABASE = "fas"
+    MONGODB_DATABASE = "document"
 
 
 class TestConfig(BaseConfig):

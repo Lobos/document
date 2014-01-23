@@ -47,7 +47,7 @@ class User(Document):
 
     @staticmethod
     def encode_pwd(pwd):
-        salt = u'fnXVY0mYvya9' #上线后就不要改了，否则...
+        salt = u'a1WiTCHb8piN' #上线后就不要改了，否则...
         return md5(zip_str(pwd, salt))
 
     @staticmethod

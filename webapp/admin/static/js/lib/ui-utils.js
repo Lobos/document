@@ -13,7 +13,7 @@ angular.module('ui.utils.treeview', [])
     .controller('TreeviewController', ['$scope', '$attrs', '$http', function ($scope, $attrs, $http) {
         $scope.data = [];
         $scope.lazy = !!$attrs.lazy;
-        $scope.selectable = !!$attrs.selectable;
+        $scope.checkable = !!$attrs.checkable;
 
         var setStatus = function (node, status) {
             node.status = status;
@@ -106,6 +106,7 @@ angular.module('ui.utils.treeview', [])
             }
 
             getNode(id).children = data;
+            alert($scope.checkable);
         };
 
         if ($attrs.root) {
@@ -120,18 +121,20 @@ angular.module('ui.utils.treeview', [])
             $http.get($attrs.src + id).success(function (json) {
                 //$scope.data = json.data;
                 setData(id, json.data);
-                $scope.setValue($scope.model || []);
-                setParentsStatus($scope.data);
+                if ($scope.checkable) {
+                    $scope.setValue($scope.model || []);
+                    setParentsStatus($scope.data);
+                }
             }).error(function () {
             });
         };
 
         $scope.update($attrs.root || '');
 
-        $scope.$watch('model', function () {
-            if ($scope.model)
+        if ($scope.checkable)
+            $scope.$watch('model', function () {
                 $scope.setValue($scope.model);
-        });
+            });
     }])
 
     .directive('treeview', function () {
@@ -157,7 +160,7 @@ angular.module("template/utils/tree_view", []).run(["$templateCache", function($
 angular.module("template/utils/tree_render", []).run(["$templateCache", function($templateCache) {
     $templateCache.put("template/utils/tree_render",
         '<i ng-class="{\'icon\':true, \'icon-minus-circle\':!t.fold&&t.type==\'folder\', \'icon-plus-circle\':t.fold&&t.type==\'folder\'}" ng-click="t.fold=!t.fold"></i>' +
-        '<i ng-show="selectable" ng-class="{\'icon\':true, \'icon-square-o\':t.status==0, \'icon-check-square-o\':t.status==1, \'icon-check-square\':t.status==2}" ng-click="select(t)"></i>' +
+        '<i ng-show="checkable" ng-class="{\'icon\':true, \'icon-square-o\':t.status==0, \'icon-check-square-o\':t.status==1, \'icon-check-square\':t.status==2}" ng-click="select(t)"></i>' +
         '{{t.text}}' +
         '<ul class="list-unstyled" ng-hide="t.fold">' +
             '<li ng-repeat="t in t.children" ng-include="\'template/utils/tree_render\'"></li>' +
