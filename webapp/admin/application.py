@@ -4,14 +4,14 @@ from flask import request, render_template, redirect, url_for
 
 def register_db(db):
     from ..models import\
-                 Icon, Role, User, Trash
-    db.register([Icon, Role, User, Trash])
+                 Icon, Role, User, Trash, Document
+    db.register([Icon, Role, User, Trash, Document])
 
 
 def register_views():
     from views import \
-               home, user, role, trash
-    for m in [home, user, role, trash]:
+               home, user, role, trash, document
+    for m in [home, user, role, trash, document]:
         m.register()
 
 
@@ -59,7 +59,7 @@ def configure_errorhandlers(app):
     def unauthorized(error):
         if request.is_xhr:
             return render_json(u"没有查看/操作的权限")
-        return redirect(url_for("home.login", next=request.path))
+        return render_template("errors/401.html", error=error)
 
 
 def set_logging(app):

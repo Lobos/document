@@ -37,8 +37,7 @@ def dump(col, obj):
         'collection': col,
         'dump_time': cn_time_now(),
         'obj': obj,
-        'edit_userid': ObjectId(user['_id']),
-        'edit_username': user['name']
+        'edit_user': user
     })
     obj.delete()
     return render_json(u'删除成功！', undo=str(obj['_id']))

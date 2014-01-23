@@ -40,44 +40,15 @@ MENU = [
         'icon': 'icon-edit',
         'children': [
             {
-                'title': u'分类',
-                'icon': 'icon-sitemap',
-                'url': 'category.index',
+                'title': u'文档管理',
+                'icon': 'icon-copy',
+                'url': 'document.list',
                 'children': [
-                    { 'title': u'添加/修改', 'url': 'category.edit' },
-                    { 'title': u'删除', 'url': 'category.remove' }
+                    { 'title': u'添加/修改', 'url': 'document.edit' },
+                    { 'title': u'删除', 'url': 'document.remove' }
                 ]
             },
 
-            {
-                'title': u'属性',
-                'icon': 'icon-credit-card',
-                'url': 'property.index',
-                'children': [
-                    { 'title': u'添加/修改', 'url': 'property.edit' },
-                    { 'title': u'删除', 'url': 'property.remove' }
-                ]
-            },
-
-            {
-                'title': u'群组',
-                'icon': 'icon-group',
-                'url': 'group.index',
-                'children': [
-                    { 'title': u'添加/修改', 'url': 'group.edit' },
-                    { 'title': u'删除', 'url': 'group.remove' }
-                ]
-            },
-
-            {
-                'title': u'文章',
-                'icon': 'icon-file',
-                'url': 'home.index',
-                'children': [
-                    { 'title': u'添加/修改', 'url': 'story.edit' },
-                    { 'title': u'删除', 'url': 'story.remove' }
-                ]
-            },
         ]
     },
 ]

@@ -1,6 +1,6 @@
 # -*- coding:utf-8 -*-
 from functools import wraps
-from flask import session, request, redirect, url_for, jsonify, render_template
+from flask import session, request, redirect, url_for, jsonify, abort
 from webapp.models import user as user_model
 from .. import app, db
 from ..config import DefaultConfig
@@ -88,7 +88,7 @@ def ck_auth(url, t):
             if suc:
                 return f(*args, **kwargs)
             else:
-                raise 401
+                abort(401)
         return func
     return decorator
 

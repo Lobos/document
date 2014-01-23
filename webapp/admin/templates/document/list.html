@@ -1,0 +1,12 @@
+{% import "_context.html" as _cxt %}
+<div>
+    {% call _cxt.header('文档管理', '文档列表') %}{% endcall %}
+    <div class="page-content scrollable">
+        {% call _cxt.filter() %}
+            <label class="form-group"><input class="form-control" placeholder="名称" ng-model="filters.name" /></label>
+        {% endcall %}
+        <div>
+            <treeview root="{{ root }}" lazy="true" src="{{ url_for('document.sublist') }}"></treeview>
+        </div>
+    </div>
+</div>
