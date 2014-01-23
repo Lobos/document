@@ -14,6 +14,7 @@ angular.module('ui.utils.treeview', [])
         $scope.data = [];
         $scope.lazy = !!$attrs.lazy;
         $scope.checkable = !!$attrs.checkable;
+        $scope.currentNode = null;
 
         var setStatus = function (node, status) {
             node.status = status;
@@ -45,6 +46,12 @@ angular.module('ui.utils.treeview', [])
             angular.forEach(nodes, function (node) {
                 _set(node);
             });
+        };
+
+        $scope.setCurrent = function (node) {
+            $scope.currentNode = node;
+            if ($scope.nodeClick)
+                $scope.nodeClick({node:node});
         };
 
         $scope.select = function (node) {
@@ -92,7 +99,13 @@ angular.module('ui.utils.treeview', [])
             setNode = function (data) {
                 angular.forEach(data, function (node) {
                     nodeDict[node.id] = node;
-                    if (node.children) setNode(node.children);
+                    if (node.children.length > 0) setNode(node.children);
+                    if (node.fold == undefined) {
+                        node.fold = !!$attrs.fold || $scope.lazy;
+                        if (!$scope.lazy && node.children.length == 0) {
+                            node.fold = undefined;
+                        }
+                    }
                 });
             },
             getNode = function (id) {
@@ -100,13 +113,13 @@ angular.module('ui.utils.treeview', [])
             };
 
         var setData = function (id, data) {
+            setNode(data);
             if (!id) {
                 $scope.data = data;
                 return;
             }
 
             getNode(id).children = data;
-            alert($scope.checkable);
         };
 
         if ($attrs.root) {
@@ -135,6 +148,33 @@ angular.module('ui.utils.treeview', [])
             $scope.$watch('model', function () {
                 $scope.setValue($scope.model);
             });
+
+        var refresh = function (options) {
+            if (options.data)
+                setData(options.id, options.data);
+            else if (options.id)
+                $scope.update(options.id);
+        };
+
+        $scope.add = function (node) {
+            $scope.nodeAdd({
+                node: node,
+                callback: refresh
+            });
+        };
+
+        $scope.edit = function (node) {
+            $scope.nodeEdit({
+                node: node,
+                callback: refresh
+            });
+        };
+
+        $scope.toggle = function (node) {
+            node.fold = !node.fold;
+            if (!node.fold && $scope.lazy)
+                $scope.update(node.id);
+        };
     }])
 
     .directive('treeview', function () {
@@ -144,7 +184,10 @@ angular.module('ui.utils.treeview', [])
             templateUrl: 'template/utils/tree_view',
             replace: true,
             scope: {
-                model: '='
+                model: '=',
+                nodeClick: '&',
+                nodeAdd: '&',
+                nodeEdit: '&'
             },
             link: function(scope, element, attrs, ctrl) {
             }
@@ -154,15 +197,19 @@ angular.module('ui.utils.treeview', [])
 
 angular.module("template/utils/tree_view", []).run(["$templateCache", function($templateCache) {
     $templateCache.put("template/utils/tree_view",
-        '<ul class="treeview list-unstyled"><li ng-repeat="t in data" ng-include="\'template/utils/tree_render\'"></li></ul>');
+        '<ul class="treeview list-unstyled"><li ng-repeat="node in data" ng-include="\'template/utils/tree_render\'"></li></ul>');
 }]);
 
 angular.module("template/utils/tree_render", []).run(["$templateCache", function($templateCache) {
     $templateCache.put("template/utils/tree_render",
-        '<i ng-class="{\'icon\':true, \'icon-minus-circle\':!t.fold&&t.type==\'folder\', \'icon-plus-circle\':t.fold&&t.type==\'folder\'}" ng-click="t.fold=!t.fold"></i>' +
-        '<i ng-show="checkable" ng-class="{\'icon\':true, \'icon-square-o\':t.status==0, \'icon-check-square-o\':t.status==1, \'icon-check-square\':t.status==2}" ng-click="select(t)"></i>' +
-        '{{t.text}}' +
-        '<ul class="list-unstyled" ng-hide="t.fold">' +
-            '<li ng-repeat="t in t.children" ng-include="\'template/utils/tree_render\'"></li>' +
+        '<label ng-class="{\'active\':node==currentNode}">' +
+            '<i ng-class="{\'icon\':true, \'icon-minus-square\':node.fold===false, \'icon-plus-square\':node.fold===true}" ng-click="toggle(node)"></i>' +
+            '<i ng-show="checkable" ng-class="{\'icon\':true, \'icon-square-o\':node.status==0, \'icon-check-square-o\':node.status==1, \'icon-check-square\':node.status==2}" ng-click="select(node)"></i>' +
+            '<span ng-click="setCurrent(node)">{{node.text}}</span>' +
+            '<a ng-click="add(node)" class="text-success" ng-show="node==currentNode"><i class="icon icon-plus"></i></a>' +
+            '<a ng-click="edit(node)" class="text-info" ng-show="node==currentNode"><i class="icon icon-edit"></i></a>' +
+        '</label>' +
+        '<ul class="list-unstyled" ng-hide="node.fold">' +
+            '<li ng-repeat="node in node.children" ng-include="\'template/utils/tree_render\'"></li>' +
         '</ul>');
 }]);
