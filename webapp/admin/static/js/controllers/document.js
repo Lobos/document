@@ -2,6 +2,10 @@
     'use strict';
 
     app.controller.DocumentCtrl = function ($scope, $attrs, $http, $location, $global) {
-        $scope.url = $attrs.url;
+        $scope.src = $attrs.src;
+
+        $scope.nodeAdd = function (node) {
+            alert(node.text);
+        };
     };
 })();
