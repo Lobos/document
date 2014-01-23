@@ -1,8 +1,23 @@
 .treeview {
   .icon {
-    width:14px;
+    width:15px;
   }
   ul {
-    margin-left: 20px;
+    padding-left: 18px;
+  }
+
+  label {
+    font-weight: normal;
+    margin: 0;
+    display: block;
+    line-height: 22px;
+
+    &.active {
+      background-color: @table-bg-active;
+
+      span {
+        font-weight: bold;
+      }
+    }
   }
 }
