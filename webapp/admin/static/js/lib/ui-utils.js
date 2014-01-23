@@ -172,8 +172,9 @@ angular.module('ui.utils.treeview', [])
 
         $scope.toggle = function (node) {
             node.fold = !node.fold;
-            if (!node.fold && $scope.lazy)
+            if ($scope.lazy && !node.loaded && !node.fold)
                 $scope.update(node.id);
+            node.loaded = true;
         };
     }])
 

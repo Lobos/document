@@ -51,8 +51,8 @@
                 if (json.status == 1)
                     $global.$reload.load();
             }).error(function () {
-                $global.$message.set('server error');
-            });
+                    $global.$message.set('server error');
+                });
         };
     };
 
@@ -170,8 +170,8 @@
                                 undo: json.undo
                             });
                         }).error(function () {
-                            $global.$message.set('server error');
-                        });
+                                $global.$message.set('server error');
+                            });
                         $modalInstance.dismiss('cancel');
                     };
                     $scope.cancel = function () {
