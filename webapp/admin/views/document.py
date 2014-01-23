@@ -25,6 +25,13 @@ def document_view():
     return render_template('document/view.html')
 
 
+@bp.route('/document/edit')
+@ck_auth('document.edit', 'html')
+#@cache.cached()
+def edit():
+    return render_template('document/edit.html')
+
+
 @bp.route('/document/sublist/')
 @bp.route('/document/sublist/<ObjectId:_id>')
 #@ck_auth('document.edit', 'json')
