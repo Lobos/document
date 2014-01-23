@@ -12,7 +12,7 @@
             {% endcall %}
 
             {% call _cxt.form_group('权限') %}
-                <treeview src="{{ url_for('role.menu_tree') }}" model="model.admin_auth_list"></treeview>
+                <treeview selectable="true" src="{{ url_for('role.menu_tree') }}" model="model.admin_auth_list"></treeview>
             {% endcall %}
 
             {% call _cxt.form_group('备注') %}
