@@ -44,7 +44,7 @@ class UserAPI(MethodView):
         else:
             model = db.User.get_from_id(_id)
             ks = ['_id', 'name', 'email', 'status', ('role', '_id')]
-            return html.get_entry(model, ks)
+            return html.get_entity(model, ks)
 
     def put(self, _id):
         f = request.json
