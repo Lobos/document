@@ -16,6 +16,7 @@ class Document(SuperDocument):
         'properties': [],
         'methods': [],
         'pid': ObjectId,
+        'path': [ObjectId],
         'edit_time': datetime,
         'edit_user': User
     }

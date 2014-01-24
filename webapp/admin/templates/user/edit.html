@@ -1,6 +1,6 @@
 {% import "_context.html" as _cxt %}
 {% set _form = "form" %}
-<div ng-controller="EditCtrl" url="{{ url_for("user_api") }}" ng-init="getEntry()">
+<div ng-controller="EditCtrl" url="{{ url_for("user_api") }}" ng-init="getEntity()">
     {% call _cxt.header('用户管理', '用户编辑') %}
         {{ _cxt.header_save(_form) }}
         {{ _cxt.header_cancel() }}

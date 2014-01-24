@@ -209,7 +209,7 @@
         $scope.hash = $location.hash();
         $scope.model = {};
 
-        $scope.getEntry = function () {
+        $scope.getEntity = function () {
             if (!$location.hash()) return;
             $http.get($scope.url + $location.hash()).success(function (json) {
                 if (json.status) $scope.model = json.model;

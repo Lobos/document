@@ -1,0 +1,13 @@
+{% import "_context.html" as _cxt %}
+{% set _form = "form" %}
+<div ng-controller="DocumentEditCtrl" url="{{ url_for("document_api") }}" ng-init="getEntity();">
+    {% call _cxt.header('文档管理', '文档编辑') %}
+        {{ _cxt.header_save(_form) }}
+        {{ _cxt.header_cancel() }}
+    {% endcall %}
+    {{model|json}}
+    <div class="page-content scrollable">
+        <form class="form-horizontal" ng-submit="submit()" novalidate name="{{ _form }}" role="form">
+        </form>
+    </div>
+</div>

@@ -1,10 +1,10 @@
 # -*- coding:utf-8 -*-
 
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, request
 from flask.views import MethodView
 from bson import ObjectId
 from .. import app, db
-from ..helpers import tree, json
+from ..helpers import tree, json, html
 from . import ck_auth, register_api
 
 
@@ -51,15 +51,25 @@ def sublist(_id=None):
 class DocumentAPI(MethodView):
 
     def get(self, _id):
-        pass
+        model = db.Document.get_from_id(ObjectId(_id))
+        ks = ['_id', 'name', 'type', 'content']
+        return html.get_entry(model, ks)
 
     def post(self):
+        f = request.json
+        model = db.Document()
         pass
 
     def put(self, _id):
+        f = request.json
+        model = db.Document.get_from_id(ObjectId(_id))
         pass
 
     def delete(self, _id):
+        pass
+
+    @staticmethod
+    def save():
         pass
 
 
