@@ -66,7 +66,7 @@ def get_table(models, ks=[], sort='_id'):
     return jsonify(context)
 
 
-def get_entry(model, ks):
+def get_entity(model, ks):
     data = {}
 
     for k in ks:

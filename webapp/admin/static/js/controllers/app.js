@@ -1,6 +1,7 @@
 (function () {
     'use strict';
 
+    var SERVER_ERROR = '数据请求出错';
     var hasOwnProperty = Object.prototype.hasOwnProperty;
 
     var isEmpty = function (obj) {
@@ -51,8 +52,8 @@
                 if (json.status == 1)
                     $global.$reload.load();
             }).error(function () {
-                    $global.$message.set('server error');
-                });
+                $global.$message.set(SERVER_ERROR);
+            });
         };
     };
 
@@ -148,6 +149,9 @@
                         item.$isChecked = false;
                     });
                 }
+            }).error(function () {
+                $global.$loading.end();
+                $global.$message.set(SERVER_ERROR);
             });
         };
         $global.$reload.set($scope.update);
@@ -170,8 +174,8 @@
                                 undo: json.undo
                             });
                         }).error(function () {
-                                $global.$message.set('server error');
-                            });
+                            $global.$message.set(SERVER_ERROR);
+                        });
                         $modalInstance.dismiss('cancel');
                     };
                     $scope.cancel = function () {
@@ -205,7 +209,7 @@
         $scope.hash = $location.hash();
         $scope.model = {};
 
-        $scope.getEntry = function () {
+        $scope.getEntity = function () {
             if (!$location.hash()) return;
             $http.get($scope.url + $location.hash()).success(function (json) {
                 if (json.status) $scope.model = json.model;
@@ -235,6 +239,7 @@
         };
 
     };
+
 
 })();
 

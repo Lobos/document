@@ -10,11 +10,24 @@ angular.module("ui.utils.tpls", ["template/utils/tree_view", "template/utils/tre
 
 angular.module('ui.utils.treeview', [])
 
-    .controller('TreeviewController', ['$scope', '$attrs', '$http', function ($scope, $attrs, $http) {
+    .factory('$tree', function () {
+        var data = {};
+        return {
+            store: function (key, value) {
+                data[key] = value;
+            },
+            retrieve: function (key) {
+                return data[key];
+            }
+        };
+    })
+
+    .controller('TreeviewController', ['$scope', '$attrs', '$http', '$tree', function ($scope, $attrs, $http, $tree) {
         $scope.data = [];
         $scope.lazy = !!$attrs.lazy;
         $scope.checkable = !!$attrs.checkable;
         $scope.currentNode = null;
+        $scope.editable = !!$attrs.editable;
 
         var setStatus = function (node, status) {
             node.status = status;
@@ -62,6 +75,7 @@ angular.module('ui.utils.treeview', [])
         };
 
         $scope.setValue = function (slist) {
+            slist = slist || [];
             if (angular.isString(slist))
                 slist = slist.split(',');
             var _set = function (nodes) {
@@ -77,6 +91,7 @@ angular.module('ui.utils.treeview', [])
                 });
             };
             _set($scope.data);
+            setParentsStatus($scope.data);
         };
 
         $scope.getValues = function (status) {
@@ -114,6 +129,7 @@ angular.module('ui.utils.treeview', [])
 
         var setData = function (id, data) {
             setNode(data);
+
             if (!id) {
                 $scope.data = data;
                 return;
@@ -126,6 +142,8 @@ angular.module('ui.utils.treeview', [])
             setData(null, [{
                 id: $attrs.root,
                 text: 'root',
+                fold: false,
+                loaded: true,
                 children: []
             }]);
         }
@@ -136,18 +154,10 @@ angular.module('ui.utils.treeview', [])
                 setData(id, json.data);
                 if ($scope.checkable) {
                     $scope.setValue($scope.model || []);
-                    setParentsStatus($scope.data);
                 }
             }).error(function () {
             });
         };
-
-        $scope.update($attrs.root || '');
-
-        if ($scope.checkable)
-            $scope.$watch('model', function () {
-                $scope.setValue($scope.model);
-            });
 
         var refresh = function (options) {
             if (options.data)
@@ -176,6 +186,24 @@ angular.module('ui.utils.treeview', [])
                 $scope.update(node.id);
             node.loaded = true;
         };
+
+        if ($tree.retrieve($attrs.src)) {
+            $scope.data = $tree.retrieve($attrs.src);
+            if ($scope.checkable) {
+                $scope.setValue($scope.model || []);
+            }
+        } else {
+            $scope.update($attrs.root || '');
+        }
+
+        if ($scope.checkable)
+            $scope.$watch('model', function () {
+                $scope.setValue($scope.model);
+            });
+
+        $scope.$watch('data', function () {
+            $tree.store($attrs.src, $scope.data);
+        });
     }])
 
     .directive('treeview', function () {
@@ -207,8 +235,8 @@ angular.module("template/utils/tree_render", []).run(["$templateCache", function
             '<i ng-class="{\'icon\':true, \'icon-minus-square\':node.fold===false, \'icon-plus-square\':node.fold===true}" ng-click="toggle(node)"></i>' +
             '<i ng-show="checkable" ng-class="{\'icon\':true, \'icon-square-o\':node.status==0, \'icon-check-square-o\':node.status==1, \'icon-check-square\':node.status==2}" ng-click="select(node)"></i>' +
             '<span ng-click="setCurrent(node)">{{node.text}}</span>' +
-            '<a ng-click="add(node)" class="text-success" ng-show="node==currentNode"><i class="icon icon-plus"></i></a>' +
-            '<a ng-click="edit(node)" class="text-info" ng-show="node==currentNode"><i class="icon icon-edit"></i></a>' +
+            '<a ng-click="add(node)" class="text-success" ng-show="node==currentNode && editable"><i class="icon icon-plus"></i></a>' +
+            '<a ng-click="edit(node)" class="text-info" ng-show="node==currentNode && editable"><i class="icon icon-edit"></i></a>' +
         '</label>' +
         '<ul class="list-unstyled" ng-hide="node.fold">' +
             '<li ng-repeat="node in node.children" ng-include="\'template/utils/tree_render\'"></li>' +

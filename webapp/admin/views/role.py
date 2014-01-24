@@ -58,7 +58,7 @@ class RoleAPI(MethodView):
         else:
             model = db.Role.get_from_id(_id)
             ks = ['_id', 'name', 'desc', 'is_admin', 'admin_auth_list']
-            return html.get_entry(model, ks)
+            return html.get_entity(model, ks)
 
     def post(self):
         f = request.json
