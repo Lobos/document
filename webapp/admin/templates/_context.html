@@ -59,8 +59,8 @@
 {%- endmacro %}
 
 
-{% macro form_group(label=None, size=[2,10]) -%}
-    <div class="form-group">
+{% macro form_group(label=None, size=[2,10], args='') -%}
+    <div class="form-group" {{ args|safe }}>
         {% if label -%}
             <label class="col-sm-{{ size[0] }} control-label">{{ label }}</label>
             <div class="col-sm-{{ size[1] }}">{{ caller() }}</div>

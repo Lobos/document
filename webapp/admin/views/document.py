@@ -52,8 +52,8 @@ class DocumentAPI(MethodView):
 
     def get(self, _id):
         model = db.Document.get_from_id(ObjectId(_id))
-        ks = ['_id', 'name', 'type', 'content']
-        return html.get_entry(model, ks)
+        ks = ['_id', 'name', 'fullname', 'type', 'content']
+        return html.get_entity(model, ks)
 
     def post(self):
         f = request.json

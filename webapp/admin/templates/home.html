@@ -35,7 +35,7 @@
             <li ng-class="{'active':node=='{{ m.url }}'}">
                 <a ng-class="{'highlight':highlight=='{{ m.url }}', 'node':true}" href="javascript:;" ng-click="active('{{ m.url }}', true)"><i class="icon {{ m.icon }}"></i> {{ m.title }}</a>
                 {% if m.children -%}
-                <ul class="nav" collapse="!node['{{ m.url }}']">
+                <ul class="nav" collapse="!!node['{{ m.url }}']">
                     {% for s in m.children %}
                     <li><a ng-class="{'highlight':highlight=='{{ s.url }}'}" ng-click="active('{{ s.url }}')" href="{{ s.url }}">{{ s.title }}</a></li>
                     {% endfor %}

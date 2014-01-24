@@ -5,9 +5,62 @@
         {{ _cxt.header_save(_form) }}
         {{ _cxt.header_cancel() }}
     {% endcall %}
-    {{model|json}}
     <div class="page-content scrollable">
         <form class="form-horizontal" ng-submit="submit()" novalidate name="{{ _form }}" role="form">
+            {% call _cxt.form_group('名称', size=[2,5]) %}
+                {{ _cxt.input("name", model="model.name", form=_form, required=True) }}
+            {% endcall %}
+
+            {% call _cxt.form_group('类型', size=[2,4]) %}
+                <select class="form-control" name="type" required ng-model="model.type">
+                    <option ng-repeat="t in ['命名空间', '类']" value="{{t}}">{{t}}</option>
+                </select>
+            {% endcall %}
+
+            <div class="form-group" ng-show='model.type=="类"'>
+                <label class="col-sm-2 control-label">属性
+                    <a href="javascript:;" ng-click="addProperty()"><i class="icon icon-plus"></i></a>
+                </label>
+                <div class="col-sm-10">
+                    <div class="form-inline animate-repeat edit-list-wrapper" ng-repeat="p in model.properties">
+                        <label class="col-md-3">名称：<input class="form-control" ng-model="p.name" /></label>
+                        <label class="col-md-4">类型：<input class="form-control" ng-model="p.type" /></label>
+                        <br /> &nbsp;
+                        <label class="checkbox"> 静态 <input class="checkbox" type="checkbox" ng-model="p.static" /></label> &nbsp;
+                        <label class="checkbox"> 常量 <input class="checkbox" type="checkbox" ng-model="p.const" /></label>
+                        <label class="col-md-12">描述：<textarea rows="3" class="form-control" ng-model="p.desc"></textarea></label>
+                        <a ng-click="model.properties.splice($index, 1)" class="close">删除 &times;</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group" ng-show='model.type=="类"'>
+                <label class="col-sm-2 control-label">方法
+                    <a href="javascript:;" ng-click="addMethod()"><i class="icon icon-plus"></i></a>
+                </label>
+                <div class="col-sm-10">
+                    <div class="form-inline animate-repeat edit-list-wrapper" ng-repeat="m in model.methods">
+                        <label class="col-md-3">名称：<input class="form-control" ng-model="m.name" /></label>
+                        <label class="col-md-4">返回类型：<input class="form-control" ng-model="m.type" /></label>
+                        <br /> &nbsp;
+                        <label class="checkbox"> 静态 <input class="checkbox" type="checkbox" ng-model="m.static" /></label> &nbsp;
+                        <label class="col-md-12">参数 <a href="javascript:;" ng-click="m.args.push({})"><i class="icon icon-plus"></i></a>：</label>
+                        <div ng-repeat="a in m.args">
+                            <label class="col-md-3"><input placeholder="名称" class="form-control" ng-model="a.name" /></label>
+                            <label class="col-md-2"><input placeholder="类型" class="form-control" ng-model="a.type" /></label>
+                            <label class="col-md-6"><input placeholder="说明" class="form-control" ng-model="a.desc" /></label>
+                            <label class="col-md-1"><button class="btn btn-default" ng-click="m.args.splice($index, 1)"><i class="icon icon-trash-o"></i></button></label>
+                        </div>
+                        <label class="col-md-12">描述：<textarea rows="3" class="form-control" ng-model="m.desc"></textarea></label>
+                        <a ng-click="model.methods.splice($index, 1)" class="close">删除 &times;</a>
+                    </div>
+                </div>
+            </div>
+
+            {% call _cxt.form_group('内容') %}
+                <textarea class="form-control" rows="10" name="desc" ng-model="model.content"></textarea>
+            {% endcall %}
         </form>
+        {{model|json}}
     </div>
 </div>
