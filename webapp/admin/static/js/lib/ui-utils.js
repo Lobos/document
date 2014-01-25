@@ -4,7 +4,7 @@
  * license: MIT-style
  */
 
-angular.module("ui.utils", ["ui.utils.tpls", "ui.utils.treeview"]);
+angular.module("ui.utils", ["ui.utils.tpls", "ui.utils.treeview", "ui.utils.markdown"]);
 angular.module("ui.utils.tpls", ["template/utils/tree_view", "template/utils/tree_render"]);
 
 
@@ -138,7 +138,7 @@ angular.module('ui.utils.treeview', [])
             getNode(id).children = data;
         };
 
-        if ($attrs.root) {
+        if ($attrs.root !== undefined) {
             setData(null, [{
                 id: $attrs.root,
                 text: 'root',
@@ -242,3 +242,34 @@ angular.module("template/utils/tree_render", []).run(["$templateCache", function
             '<li ng-repeat="node in node.children" ng-include="\'template/utils/tree_render\'"></li>' +
         '</ul>');
 }]);
+
+
+angular.module('ui.utils.markdown', [])
+
+    .directive("markdown", function ($compile) {
+        var nextId = 1;
+        return {
+            restrict: 'EA',
+            //controller: 'MarkdownController',
+            template:'<div class="pagedown-editor"></div>',
+            replace: true,
+            scope: {
+                model: '='
+            },
+            link: function(scope, element, attrs, ctrl) {
+                var markdownId = nextId++;
+                var template = '<div class="wmd-panel">' +
+                        '<div id="wmd-button-bar-' + markdownId + '"></div>' +
+                        '<textarea class="wmd-input form-control" rows="10" name="content" ng-model="model" id="wmd-input-' + markdownId + '"></textarea>' +
+                        '</div>' +
+                        '<div id="wmd-preview-' + markdownId + '" class="wmd-panel wmd-preview"></div>';
+                element.html(template);
+
+                $compile(element.contents())(scope);
+
+                var converter = new Markdown.Converter();
+                var editor = new Markdown.Editor(converter, '-' + markdownId, {});
+                editor.run();
+            }
+        };
+    });

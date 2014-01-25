@@ -5,7 +5,7 @@ from flask.views import MethodView
 from bson import ObjectId
 from .. import app, db
 from ..helpers import tree, json, html
-from . import ck_auth, register_api
+from . import ck_auth, register_api, set_edit_info, render_json
 
 
 bp = Blueprint('document', __name__)
@@ -42,8 +42,13 @@ def sublist(_id=None):
 
     l = []
     for d in models:
-        _id = str(d['_id'])
-        l.append(tree.Tree(_id, str(d['pid']), d['name']))
+        #_id = str(d['_id'])
+        #l.append(tree.Tree(_id, str(d['pid']), d['name']))
+        l.append({
+            'id': str(d['_id']),
+            'text': d['name'],
+            'children': []
+        })
 
     return json.dumps({'status': 1, 'data': l})
 
@@ -52,25 +57,30 @@ class DocumentAPI(MethodView):
 
     def get(self, _id):
         model = db.Document.get_from_id(ObjectId(_id))
-        ks = ['_id', 'name', 'fullname', 'type', 'content']
+        ks = ['_id', 'name', 'pid', 'fullname', 'type', 'content', 'properties', 'methods']
         return html.get_entity(model, ks)
 
     def post(self):
         f = request.json
         model = db.Document()
-        pass
+        return self.save(model, f)
 
     def put(self, _id):
         f = request.json
         model = db.Document.get_from_id(ObjectId(_id))
-        pass
+        return self.save(model, f)
 
     def delete(self, _id):
         pass
 
     @staticmethod
-    def save():
-        pass
+    def save(model, f):
+        model['pid'] = ObjectId(f.get('pid'))
+        html.clone_property(model, f, 'name', 'type', 'properties', 'methods', 'content')
+        set_edit_info(model)
+
+        model.save()
+        return render_json(u'%s 保存成功.' % model['name'], 1, id=str(model['_id']))
 
 
 def register():

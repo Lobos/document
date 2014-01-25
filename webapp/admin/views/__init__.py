@@ -1,9 +1,11 @@
 # -*- coding:utf-8 -*-
 from functools import wraps
 from flask import session, request, redirect, url_for, jsonify, abort
+from bson import ObjectId
 from webapp.models import user as user_model
 from .. import app, db
 from ..config import DefaultConfig
+from ..helpers import cn_time_now
 
 
 # render ===========================================================================
@@ -105,3 +107,10 @@ def ck_signin():
 
         return func
     return decorator
+
+
+def set_edit_info(model):
+    user = get_user()
+    model['edit_userid'] = ObjectId(user['_id'])
+    model['edit_username'] = user['name']
+    model['edit_time'] = cn_time_now()

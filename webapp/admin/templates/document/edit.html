@@ -1,6 +1,6 @@
 {% import "_context.html" as _cxt %}
 {% set _form = "form" %}
-<div ng-controller="DocumentEditCtrl" url="{{ url_for("document_api") }}" ng-init="getEntity();">
+<div ng-controller="DocumentEditCtrl" src="{{ url_for("document_api") }}" ng-init="getEntity();">
     {% call _cxt.header('文档管理', '文档编辑') %}
         {{ _cxt.header_save(_form) }}
         {{ _cxt.header_cancel() }}
@@ -12,9 +12,7 @@
             {% endcall %}
 
             {% call _cxt.form_group('类型', size=[2,4]) %}
-                <select class="form-control" name="type" required ng-model="model.type">
-                    <option ng-repeat="t in ['命名空间', '类']" value="{{t}}">{{t}}</option>
-                </select>
+                <select class="form-control" name="type" ng-options="t for t in ['类', '命名空间', '其他']" required ng-model="model.type"></select>
             {% endcall %}
 
             <div class="form-group" ng-show='model.type=="类"'>
@@ -58,8 +56,10 @@
             </div>
 
             {% call _cxt.form_group('内容') %}
-                <textarea class="form-control" rows="10" name="desc" ng-model="model.content"></textarea>
+                <markdown model="model.content"></markdown>
             {% endcall %}
+
+            {{ _cxt.form_save(_form) }}
         </form>
         {{model|json}}
     </div>

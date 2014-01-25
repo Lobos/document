@@ -11,12 +11,13 @@ class Document(SuperDocument):
     structure = {
         'name': unicode,
         'fullname': unicode,
-        'type': int,
+        'type': unicode,
         'content': unicode,
         'properties': [],
         'methods': [],
         'pid': ObjectId,
         'path': [ObjectId],
-        'edit_time': datetime,
-        'edit_user': User
+        'edit_userid': ObjectId,
+        'edit_username': unicode,
+        'edit_time': datetime
     }

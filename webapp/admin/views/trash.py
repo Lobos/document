@@ -20,7 +20,7 @@ class TrashAPI(MethodView):
         }
 
         user = get_user()
-        obj = db.trash.find_one({'_id': ObjectId(_id), 'edit_userid': ObjectId(str(user['_id']))})
+        obj = db.trash.find_one({'_id': ObjectId(_id), 'edit_userid': ObjectId(user['_id'])})
         if not obj:
             return render_json(u'内容不存在')
 
@@ -37,7 +37,7 @@ def dump(col, obj):
         'collection': col,
         'dump_time': cn_time_now(),
         'obj': obj,
-        'edit_user': user
+        'edit_userid': ObjectId(user['_id'])
     })
     obj.delete()
     return render_json(u'删除成功！', undo=str(obj['_id']))
