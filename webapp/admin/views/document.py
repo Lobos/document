@@ -42,8 +42,6 @@ def sublist(_id=None):
 
     l = []
     for d in models:
-        #_id = str(d['_id'])
-        #l.append(tree.Tree(_id, str(d['pid']), d['name']))
         l.append({
             'id': str(d['_id']),
             'text': d['name'],
