@@ -16,7 +16,8 @@ class TrashAPI(MethodView):
     def put(self, _id):
         COLLECTIONS = {
             'user': db.user,
-            'role': db.role
+            'role': db.role,
+            'document': db.document
         }
 
         user = get_user()
@@ -40,7 +41,7 @@ def dump(col, obj):
         'edit_userid': ObjectId(user['_id'])
     })
     obj.delete()
-    return render_json(u'删除成功！', undo=str(obj['_id']))
+    return render_json(u'删除成功！', 1, undo=str(obj['_id']))
 
 
 def register():

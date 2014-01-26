@@ -5,7 +5,7 @@ from flask.views import MethodView
 from bson import ObjectId
 from .. import app, db
 from ..helpers import tree, json, html
-from . import ck_auth, register_api, set_edit_info, render_json
+from . import trash, ck_auth, register_api, set_edit_info, render_json
 
 
 bp = Blueprint('document', __name__)
@@ -38,7 +38,7 @@ def edit():
 def sublist(_id=None):
     if _id is None:
         _id = ObjectId(tree.ROOT_OBJECT_ID)
-    models = db.Document.find({'pid': _id})
+    models = db.Document.find({'pid': _id}).sort('name')
 
     l = []
     for d in models:
@@ -73,7 +73,13 @@ class DocumentAPI(MethodView):
         return self.save(model, f)
 
     def delete(self, _id):
-        pass
+        has_child = db.Document.find({'pid':ObjectId(_id)}).count() > 0
+        if has_child:
+            return render_json(u'有子文档，不能删除。')
+
+        model = db.Document.get_from_id(ObjectId(_id))
+        return trash.dump('document', model)
+
 
     @staticmethod
     def save(model, f):

@@ -188,10 +188,15 @@ angular.module('ui.utils.treeview', [])
 
         $scope.remove = function (node) {
             var parent = getNode(node.pid);
-            if (!parent) return;
-
             var index = parent.children.indexOf(node);
-            parent.children.splice(index, 1);
+            $scope.nodeRemove({
+                node: node,
+                tree: $scope.data,
+                callback: function (success) {
+                    if (!success || !parent) return;
+                    parent.children.splice(index, 1);
+                }
+            });
         };
 
         $scope.toggle = function (node) {
@@ -231,7 +236,8 @@ angular.module('ui.utils.treeview', [])
                 model: '=',
                 nodeClick: '&',
                 nodeAdd: '&',
-                nodeEdit: '&'
+                nodeEdit: '&',
+                nodeRemove: '&'
             },
             link: function(scope, element, attrs, ctrl) {
             }

@@ -30,6 +30,20 @@
 
             $global.store(DOCUMENTCALLBACK, callback);
         };
+
+        $scope.nodeRemove = function (node, callback, url) {
+            $http.delete(url + node.id).success(function (json) {
+                if (json.status == 1) {
+                    $global.$message.set(json.msg, {
+                        dismiss: 20,
+                        undo: json.undo
+                    });
+                    callback(true);
+                } else {
+                    $global.$message.set(json.msg);
+                }
+            });
+        }
     };
 
 

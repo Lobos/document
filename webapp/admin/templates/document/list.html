@@ -3,7 +3,7 @@
     {% call _cxt.header('文档管理', '文档列表') %}{% endcall %}
     <div class="page-content scrollable" src="document.edit" sublist="{{ url_for('document.sublist') }}" ng-controller="DocumentCtrl">
         <div>
-            <treeview node-add="nodeAdd(node, tree)" node-edit="nodeEdit(node, tree)" root="{{ root }}" editable="true" lazy="true" src="{{ url_for('document.sublist') }}"></treeview>
+            <treeview node-add="nodeAdd(node, tree)" node-remove="nodeRemove(node, callback, '{{ url_for("document_api") }}')" node-edit="nodeEdit(node, tree)" root="{{ root }}" editable="true" lazy="true" src="{{ url_for('document.sublist') }}"></treeview>
         </div>
     </div>
 </div>

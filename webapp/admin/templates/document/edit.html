@@ -13,6 +13,7 @@
 
             {% call _cxt.form_group('类型', size=[2,4]) %}
                 <select class="form-control" name="type" ng-options="t for t in ['类', '命名空间', '其他']" required ng-model="model.type"></select>
+                <span class="help-block" ng-show="{{ _form }}.type.$dirty && {{ _form }}.type.$error.required">不能为空！</span>
             {% endcall %}
 
             <div class="form-group" ng-show='model.type=="类"'>
