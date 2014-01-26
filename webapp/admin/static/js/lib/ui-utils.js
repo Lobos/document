@@ -169,15 +169,29 @@ angular.module('ui.utils.treeview', [])
         $scope.add = function (node) {
             $scope.nodeAdd({
                 node: node,
-                callback: refresh
+                tree: $scope.data,
+                callback: function () {
+                    refresh(node.id);
+                }
             });
         };
 
         $scope.edit = function (node) {
             $scope.nodeEdit({
                 node: node,
-                callback: refresh
+                tree: $scope.data,
+                callback: function () {
+                    refresh(node.pid);
+                }
             });
+        };
+
+        $scope.remove = function (node) {
+            var parent = getNode(node.pid);
+            if (!parent) return;
+
+            var index = parent.children.indexOf(node);
+            parent.children.splice(index, 1);
         };
 
         $scope.toggle = function (node) {
@@ -189,6 +203,7 @@ angular.module('ui.utils.treeview', [])
 
         if ($tree.retrieve($attrs.src)) {
             $scope.data = $tree.retrieve($attrs.src);
+            setNode($scope.data);
             if ($scope.checkable) {
                 $scope.setValue($scope.model || []);
             }
@@ -232,11 +247,12 @@ angular.module("template/utils/tree_view", []).run(["$templateCache", function($
 angular.module("template/utils/tree_render", []).run(["$templateCache", function($templateCache) {
     $templateCache.put("template/utils/tree_render",
         '<label ng-class="{\'active\':node==currentNode}">' +
-            '<i ng-class="{\'icon\':true, \'icon-minus-square\':node.fold===false, \'icon-plus-square\':node.fold===true}" ng-click="toggle(node)"></i>' +
+            '<i ng-class="{\'icon\':true, \'icon-caret-down\':node.fold===false, \'icon-caret-right\':node.fold===true}" ng-click="toggle(node)"></i>' +
             '<i ng-show="checkable" ng-class="{\'icon\':true, \'icon-square-o\':node.status==0, \'icon-check-square-o\':node.status==1, \'icon-check-square\':node.status==2}" ng-click="select(node)"></i>' +
             '<span ng-click="setCurrent(node)">{{node.text}}</span>' +
-            '<a ng-click="add(node)" class="text-success" ng-show="node==currentNode && editable"><i class="icon icon-plus"></i></a>' +
-            '<a ng-click="edit(node)" class="text-info" ng-show="node==currentNode && editable"><i class="icon icon-edit"></i></a>' +
+            '<a href="javascript:;" ng-click="add(node)" class="text-success" ng-show="node==currentNode && editable"><i class="icon icon-plus"></i></a>' +
+            '<a href="javascript:;" ng-click="edit(node)" class="text-info" ng-show="node==currentNode && editable"><i class="icon icon-edit"></i></a>' +
+            '<a href="javascript:;" ng-click="remove(node)" class="text-danger" ng-show="node==currentNode && editable && node.children.length == 0"><i class="icon icon-trash-o"></i></a>' +
         '</label>' +
         '<ul class="list-unstyled" ng-hide="node.fold">' +
             '<li ng-repeat="node in node.children" ng-include="\'template/utils/tree_render\'"></li>' +

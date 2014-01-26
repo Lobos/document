@@ -2,7 +2,15 @@
     'use strict';
 
     app.serviceFactory.$global = function ($timeout) {
-        var obj = {};
+        var stacks = {};
+        var obj = {
+            store: function (key, data) {
+                stacks[key] = data;
+            },
+            retrieve: function (key, def) {
+                return stacks[key] || def;
+            }
+        };
 
         // $reload ===========================================
         var reload = null;
@@ -62,6 +70,7 @@
                 informs.splice(0, 1);
             }
         };
+
 
         return obj;
     };

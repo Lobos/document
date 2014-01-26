@@ -1,16 +1,34 @@
 (function () {
     'use strict';
 
+    var DOCUMENTCALLBACK = 'document callback';
+
     app.controller.DocumentCtrl = function ($scope, $attrs, $http, $location, $global) {
         $scope.src = $attrs.src;
+        $scope.sublist = $attrs.sublist;
 
-        $scope.nodeAdd = function (node) {
+        $scope.nodeAdd = function (node, tree) {
             var p = node.id ? '?p=' + node.id : '';
+
+            var callback = function (model) {
+                node.fold = false;
+                $http.get($scope.sublist + node.id).success(function (json) {
+                    node.children = json.data;
+                });
+            };
+            $global.store(DOCUMENTCALLBACK, callback);
+
             $location.url($scope.src + p);
         };
 
-        $scope.nodeEdit = function (node) {
+        $scope.nodeEdit = function (node, tree) {
             $location.url($scope.src + '#' + node.id);
+
+            var callback = function (model) {
+                node.text = model.name;
+            };
+
+            $global.store(DOCUMENTCALLBACK, callback);
         };
     };
 
@@ -49,11 +67,14 @@
             hp.success(function (json) {
                 $global.$loading.end();
                 if (json.status == 1) {
-                    $global.$message.set(json.msg);
+                    $global.$message.set(json.model.name + ' 保存成功');
                     if ($scope.hash != json.id) {
                         $scope.hash = json.id;
                     }
-                    //$scope.back();
+                    var callback = $global.retrieve(DOCUMENTCALLBACK);
+                    if (callback)
+                        callback(json.model);
+                    $scope.back();
                 } else {
                     $global.$message.set(json.msg, {
                         type: 'danger'

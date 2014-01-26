@@ -47,6 +47,8 @@ def sublist(_id=None):
         l.append({
             'id': str(d['_id']),
             'text': d['name'],
+            'pid': str(d['pid']),
+            'fold': True,
             'children': []
         })
 
@@ -79,8 +81,12 @@ class DocumentAPI(MethodView):
         html.clone_property(model, f, 'name', 'type', 'properties', 'methods', 'content')
         set_edit_info(model)
 
-        model.save()
-        return render_json(u'%s 保存成功.' % model['name'], 1, id=str(model['_id']))
+        try:
+            model.save()
+            ks = ['_id', 'name', 'pid', 'fullname', 'type', 'content', 'properties', 'methods']
+            return html.get_entity(model, ks)
+        except:
+            return render_json(u'数据存储出错')
 
 
 def register():
